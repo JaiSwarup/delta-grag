@@ -1,0 +1,3 @@
+- this is a uv (python) project, adhere to uv conventions
+- run the commands using `uv run ...`
+- add libraries using `uv add ...`

@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  dgrag:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: btp-dgrag:latest
+    container_name: btp-dgrag
+    env_file:
+      - .env
+    environment:
+      DGRAG_CACHE_DIR: /app/.cache/dgrag
+      DGRAG_HOST: 0.0.0.0
+      DGRAG_PORT: "8000"
+      GITHUB_TOKEN_ENV_VAR: GITHUB_TOKEN
+      DGRAG_DEPTH_K: ${DGRAG_DEPTH_K:-2}
+      DGRAG_DEPTH_M: ${DGRAG_DEPTH_M:-3}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      REDIS_ENABLED: ${REDIS_ENABLED:-false}
+    ports:
+      - "8000:8000"
+    volumes:
+      - dgrag-cache:/app/.cache/dgrag
+    depends_on:
+      redis:
+        condition: service_started
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: btp-dgrag-redis
+    command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    profiles:
+      - cache
+
+volumes:
+  dgrag-cache:
+  redis-data:
