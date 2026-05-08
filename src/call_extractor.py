@@ -22,6 +22,8 @@ class CallEdge:
     is_resolved: bool
     resolution_method: ResolutionMethod
     raw_callee: str
+    caller_file_path: Path
+    callee_file_path: Path | None
 
 
 def extract_call_edges(
@@ -38,15 +40,13 @@ def extract_call_edges(
     if not functions:
         return []
 
-    by_fqn = {fn.fqn: fn for fn in all_functions}
-    simple_name_to_fqns: dict[str, list[str]] = {}
+    by_fqn: dict[str, list[FunctionNode]] = {}
+    simple_name_to_functions: dict[str, list[FunctionNode]] = {}
     for function in all_functions:
+        by_fqn.setdefault(function.fqn, []).append(function)
         simple_name = function.fqn.rsplit(".", 1)[-1]
-        simple_name_to_fqns.setdefault(simple_name, []).append(function.fqn)
+        simple_name_to_functions.setdefault(simple_name, []).append(function)
 
-    local_function_names = {
-        function.fqn: function.fqn.rsplit(".", 1)[-1] for function in functions
-    }
     import_aliases = import_map if import_map is not None else build_import_map(path)
     function_nodes_by_line = sorted(
         functions, key=lambda fn: (fn.start_line, fn.end_line)
@@ -71,12 +71,11 @@ def extract_call_edges(
             caller = enclosing_function(getattr(expression, "lineno", 1))
             if caller is not None:
                 raw_callee = _expr_to_text(expression.func)
-                callee_fqn, method = _resolve_callee(
+                callee, callee_fqn, method = _resolve_callee(
                     raw_callee=raw_callee,
                     caller=caller,
                     all_functions_by_fqn=by_fqn,
-                    simple_name_to_fqns=simple_name_to_fqns,
-                    local_function_names=local_function_names,
+                    simple_name_to_functions=simple_name_to_functions,
                     import_aliases=import_aliases,
                 )
                 edges.append(
@@ -87,6 +86,10 @@ def extract_call_edges(
                         is_resolved=method != "unresolved",
                         resolution_method=method,
                         raw_callee=raw_callee,
+                        caller_file_path=caller.file_path,
+                        callee_file_path=(
+                            callee.file_path if callee is not None else None
+                        ),
                     )
                 )
             for child in ast.iter_child_nodes(expression):
@@ -162,13 +165,32 @@ def _resolve_callee(
     *,
     raw_callee: str,
     caller: FunctionNode,
-    all_functions_by_fqn: dict[str, FunctionNode],
-    simple_name_to_fqns: dict[str, list[str]],
-    local_function_names: dict[str, str],
+    all_functions_by_fqn: dict[str, list[FunctionNode]],
+    simple_name_to_functions: dict[str, list[FunctionNode]],
     import_aliases: dict[str, str],
-) -> tuple[str, ResolutionMethod]:
+) -> tuple[FunctionNode | None, str, ResolutionMethod]:
     if not raw_callee:
-        return raw_callee, "unresolved"
+        return None, raw_callee, "unresolved"
+
+    def unique_by_fqn(fqn: str, *, same_file: bool = False) -> FunctionNode | None:
+        matches = all_functions_by_fqn.get(fqn, [])
+        if same_file:
+            matches = [
+                match
+                for match in matches
+                if match.file_path.resolve() == caller.file_path.resolve()
+            ]
+        return matches[0] if len(matches) == 1 else None
+
+    def unique_by_simple(name: str, *, same_file: bool = False) -> FunctionNode | None:
+        matches = simple_name_to_functions.get(name, [])
+        if same_file:
+            matches = [
+                match
+                for match in matches
+                if match.file_path.resolve() == caller.file_path.resolve()
+            ]
+        return matches[0] if len(matches) == 1 else None
 
     if "." not in raw_callee:
         caller_scope_prefix = caller.fqn.rsplit(".", 1)[0] if "." in caller.fqn else ""
@@ -176,54 +198,51 @@ def _resolve_callee(
         same_scope_fqn = (
             f"{caller_scope_prefix}.{raw_callee}" if caller_scope_prefix else raw_callee
         )
-        if same_scope_fqn in all_functions_by_fqn and same_scope_fqn != caller.fqn:
-            return same_scope_fqn, "direct"
+        same_scope = unique_by_fqn(same_scope_fqn, same_file=True)
+        if same_scope is not None and same_scope.fqn != caller.fqn:
+            return same_scope, same_scope.fqn, "direct"
 
         if raw_callee in import_aliases:
             target = import_aliases[raw_callee]
-            if target in all_functions_by_fqn:
-                return target, "import"
+            imported_target = unique_by_fqn(target)
+            if imported_target is not None:
+                return imported_target, imported_target.fqn, "import"
             imported_name = target.rsplit(".", 1)[-1]
-            imported_matches = simple_name_to_fqns.get(imported_name, [])
-            if len(imported_matches) == 1:
-                return imported_matches[0], "import"
+            imported_match = unique_by_simple(imported_name)
+            if imported_match is not None:
+                return imported_match, imported_match.fqn, "import"
 
-        local_matches = [
-            fqn
-            for fqn in simple_name_to_fqns.get(raw_callee, [])
-            if all_functions_by_fqn[fqn].file_path.resolve()
-            == caller.file_path.resolve()
-        ]
-        if len(local_matches) == 1:
-            return local_matches[0], "direct"
-        if len(local_matches) > 1:
-            return raw_callee, "unresolved"
+        local_match = unique_by_simple(raw_callee, same_file=True)
+        if local_match is not None:
+            return local_match, local_match.fqn, "direct"
 
-        global_matches = simple_name_to_fqns.get(raw_callee, [])
-        if len(global_matches) == 1:
-            return global_matches[0], "direct"
+        global_match = unique_by_simple(raw_callee)
+        if global_match is not None:
+            return global_match, global_match.fqn, "direct"
 
-        return raw_callee, "unresolved"
+        return None, raw_callee, "unresolved"
 
     head, tail = raw_callee.split(".", 1)
 
     if head in {"self", "cls"} and caller.class_name:
         candidate = f"{caller.class_name}.{tail}"
-        if candidate in all_functions_by_fqn:
-            return candidate, "self"
-        return raw_callee, "unresolved"
+        self_match = unique_by_fqn(candidate, same_file=True)
+        if self_match is not None:
+            return self_match, self_match.fqn, "self"
+        return None, raw_callee, "unresolved"
 
     if head in import_aliases:
         candidate = f"{import_aliases[head]}.{tail}"
-        if candidate in all_functions_by_fqn:
-            return candidate, "import"
+        imported_target = unique_by_fqn(candidate)
+        if imported_target is not None:
+            return imported_target, imported_target.fqn, "import"
         imported_name = candidate.rsplit(".", 1)[-1]
-        imported_matches = simple_name_to_fqns.get(imported_name, [])
-        if len(imported_matches) == 1:
-            return imported_matches[0], "import"
-        return raw_callee, "unresolved"
+        imported_match = unique_by_simple(imported_name)
+        if imported_match is not None:
+            return imported_match, imported_match.fqn, "import"
+        return None, raw_callee, "unresolved"
 
-    return raw_callee, "unresolved"
+    return None, raw_callee, "unresolved"
 
 
 def _expr_to_text(expr: ast.expr) -> str:

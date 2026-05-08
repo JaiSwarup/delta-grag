@@ -9,9 +9,12 @@ from pathlib import Path
 from time import perf_counter
 from typing import Sequence
 
+import networkx as nx
+
 from src.ast_extractor import FunctionNode, extract_functions
-from src.call_extractor import build_import_map, extract_call_edges
+from src.call_extractor import CallEdge, build_import_map, extract_call_edges
 from src.call_graph_builder import CallGraph
+from src.graph_identity import build_node_id
 from src.ingestion.diff_parser import DiffParseResult, FileDiff
 from src.repo_manager import RepoSnapshot
 
@@ -35,11 +38,12 @@ def incremental_update(
     root = _resolve_snapshot_root(snapshot)
     file_diffs = _normalize_file_diffs(diff_hunks)
 
-    updated_graph = CallGraph()
+    updated_graph = CallGraph(repo_root=root)
     updated_graph.graph = call_graph.graph.copy()
 
     current_python_files = _collect_current_python_files(file_diffs, root)
     existing_nodes_by_path = _group_nodes_by_rel_path(updated_graph, root)
+    rename_sources_by_current_path = _rename_sources_by_current_path(file_diffs)
 
     old_node_ids_by_current_path: dict[str, set[str]] = {}
     removed_nodes: set[str] = set()
@@ -57,18 +61,34 @@ def incremental_update(
 
     # Re-extract changed/renamed/current files and update nodes in place when possible.
     for rel_path, abs_path in current_python_files.items():
-        old_node_ids = set(existing_nodes_by_path.get(rel_path, set()))
+        old_rel_path = rename_sources_by_current_path.get(rel_path, rel_path)
+        old_node_ids = set(existing_nodes_by_path.get(old_rel_path, set()))
         old_node_ids_by_current_path[rel_path] = old_node_ids
 
         new_functions = extract_functions(abs_path)
-        new_ids = {function.fqn for function in new_functions}
+        new_ids = {
+            build_node_id(function.file_path, function.fqn, root)
+            for function in new_functions
+        }
+        function_by_id = {
+            build_node_id(function.file_path, function.fqn, root): function
+            for function in new_functions
+        }
+
+        if old_rel_path != rel_path:
+            old_node_ids = _relabel_renamed_file_nodes(
+                updated_graph,
+                old_node_ids=old_node_ids,
+                new_functions=new_functions,
+                root=root,
+            )
+            old_node_ids_by_current_path[rel_path] = old_node_ids
 
         for stale_node_id in sorted(old_node_ids - new_ids):
             if stale_node_id in updated_graph.graph:
                 updated_graph.graph.remove_node(stale_node_id)
                 removed_nodes.add(stale_node_id)
 
-        function_by_id = {function.fqn: function for function in new_functions}
         for function_id in sorted(old_node_ids & new_ids):
             _update_function_node(updated_graph, function_by_id[function_id])
 
@@ -98,13 +118,18 @@ def incremental_update(
             all_functions=all_functions,
             import_map=import_map,
         ):
+            caller_id = updated_graph.node_id_for_edge_endpoint(
+                edge.caller_file_path,
+                edge.caller_fqn,
+            )
+            callee_id = _edge_callee_id(updated_graph, edge)
             if (
-                edge.caller_fqn not in updated_graph.graph
-                or edge.callee_fqn not in updated_graph.graph
+                caller_id not in updated_graph.graph
+                or callee_id not in updated_graph.graph
             ):
                 continue
-            if updated_graph.graph.has_edge(edge.caller_fqn, edge.callee_fqn):
-                updated_graph.graph.edges[(edge.caller_fqn, edge.callee_fqn)].update(
+            if updated_graph.graph.has_edge(caller_id, callee_id):
+                updated_graph.graph.edges[(caller_id, callee_id)].update(
                     {
                         "call_site_line": edge.call_site_line,
                         "is_resolved": edge.is_resolved,
@@ -114,7 +139,7 @@ def incremental_update(
                 )
             else:
                 updated_graph.add_call(edge)
-                added_edges.add((edge.caller_fqn, edge.callee_fqn))
+                added_edges.add((caller_id, callee_id))
 
     final_node_ids = set(updated_graph.graph.nodes())
     unchanged_nodes = len(final_node_ids - added_nodes)
@@ -163,6 +188,44 @@ def _collect_current_python_files(
     return current_files
 
 
+def _rename_sources_by_current_path(file_diffs: Sequence[FileDiff]) -> dict[str, str]:
+    sources: dict[str, str] = {}
+    for file_diff in file_diffs:
+        if not file_diff.is_rename:
+            continue
+        old_path = _normalize_rel_path(file_diff.rename_from or file_diff.old_path)
+        new_path = _normalize_rel_path(file_diff.rename_to or file_diff.new_path)
+        if old_path and new_path:
+            sources[new_path] = old_path
+    return sources
+
+
+def _relabel_renamed_file_nodes(
+    call_graph: CallGraph,
+    *,
+    old_node_ids: set[str],
+    new_functions: list[FunctionNode],
+    root: Path,
+) -> set[str]:
+    new_id_by_fqn = {
+        function.fqn: build_node_id(function.file_path, function.fqn, root)
+        for function in new_functions
+    }
+    relabels: dict[str, str] = {}
+    for old_node_id in old_node_ids:
+        if old_node_id not in call_graph.graph:
+            continue
+        fqn = str(call_graph.graph.nodes[old_node_id].get("fqn", old_node_id))
+        new_node_id = new_id_by_fqn.get(fqn)
+        if new_node_id is not None and new_node_id != old_node_id:
+            relabels[old_node_id] = new_node_id
+
+    if relabels:
+        nx.relabel_nodes(call_graph.graph, relabels, copy=False)
+
+    return {relabels.get(node_id, node_id) for node_id in old_node_ids}
+
+
 def _group_nodes_by_rel_path(call_graph: CallGraph, root: Path) -> dict[str, set[str]]:
     grouped: dict[str, set[str]] = {}
     for node_id, data in call_graph.graph.nodes(data=True):
@@ -190,10 +253,12 @@ def _normalize_rel_path(value: str | None, *, root: Path | None = None) -> str |
 
 
 def _update_function_node(call_graph: CallGraph, function: FunctionNode) -> None:
-    if function.fqn not in call_graph.graph:
+    node_id = call_graph.node_id_for_function(function)
+    if node_id not in call_graph.graph:
         return
-    call_graph.graph.nodes[function.fqn].update(
+    call_graph.graph.nodes[node_id].update(
         {
+            "id": node_id,
             "fqn": function.fqn,
             "file_path": str(function.file_path),
             "start_line": function.start_line,
@@ -208,12 +273,18 @@ def _update_function_node(call_graph: CallGraph, function: FunctionNode) -> None
     )
 
 
+def _edge_callee_id(call_graph: CallGraph, edge: CallEdge) -> str:
+    if edge.callee_file_path is None:
+        return edge.callee_fqn
+    return call_graph.node_id_for_edge_endpoint(edge.callee_file_path, edge.callee_fqn)
+
+
 def _function_nodes_from_graph(call_graph: CallGraph) -> list[FunctionNode]:
     functions: list[FunctionNode] = []
     for node_id, data in call_graph.graph.nodes(data=True):
         functions.append(
             FunctionNode(
-                fqn=str(node_id),
+                fqn=str(data.get("fqn", node_id)),
                 file_path=Path(str(data.get("file_path", ""))).resolve(),
                 start_line=int(data.get("start_line", 1)),
                 end_line=int(data.get("end_line", 1)),

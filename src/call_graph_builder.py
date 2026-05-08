@@ -12,19 +12,24 @@ import networkx as nx
 
 from src.ast_extractor import FunctionNode, extract_functions
 from src.call_extractor import CallEdge, build_import_map, extract_call_edges
+from src.graph_identity import build_node_id
 from src.repo_manager import RepoSnapshot
 
 
 @dataclass
 class CallGraph:
     graph: nx.DiGraph
+    repo_root: Path | None
 
-    def __init__(self) -> None:
+    def __init__(self, repo_root: str | Path | None = None) -> None:
         self.graph = nx.DiGraph()
+        self.repo_root = Path(repo_root).expanduser().resolve() if repo_root else None
 
     def add_function(self, function: FunctionNode) -> None:
+        node_id = self.node_id_for_function(function)
         self.graph.add_node(
-            function.fqn,
+            node_id,
+            id=node_id,
             fqn=function.fqn,
             file_path=str(function.file_path),
             start_line=function.start_line,
@@ -38,14 +43,27 @@ class CallGraph:
         )
 
     def add_call(self, edge: CallEdge) -> None:
-        self.graph.add_edge(
+        caller_id = self.node_id_for_edge_endpoint(
+            edge.caller_file_path,
             edge.caller_fqn,
-            edge.callee_fqn,
+        )
+        callee_id = _edge_callee_id(self, edge)
+        self.graph.add_edge(
+            caller_id,
+            callee_id,
             call_site_line=edge.call_site_line,
             is_resolved=edge.is_resolved,
             resolution_method=edge.resolution_method,
             raw_callee=edge.raw_callee,
         )
+
+    def node_id_for_function(self, function: FunctionNode) -> str:
+        return self.node_id_for_edge_endpoint(function.file_path, function.fqn)
+
+    def node_id_for_edge_endpoint(self, file_path: str | Path, fqn: str) -> str:
+        if self.repo_root is None:
+            return fqn
+        return build_node_id(file_path, fqn, self.repo_root)
 
     def get_callers(self, fqn: str, depth: int = 1) -> set[str]:
         return _bounded_bfs(self.graph.reverse(copy=False), fqn, depth)
@@ -106,7 +124,7 @@ def build_call_graph(snapshot: RepoSnapshot | str | Path) -> CallGraph:
     for file_path in python_files:
         all_functions.extend(extract_functions(file_path))
 
-    call_graph = CallGraph()
+    call_graph = CallGraph(repo_root=root)
     for function in all_functions:
         call_graph.add_function(function)
 
@@ -117,7 +135,12 @@ def build_call_graph(snapshot: RepoSnapshot | str | Path) -> CallGraph:
             all_functions=all_functions,
             import_map=import_map,
         ):
-            if edge.caller_fqn in call_graph.graph and edge.callee_fqn in call_graph.graph:
+            caller_id = call_graph.node_id_for_edge_endpoint(
+                edge.caller_file_path,
+                edge.caller_fqn,
+            )
+            callee_id = _edge_callee_id(call_graph, edge)
+            if caller_id in call_graph.graph and callee_id in call_graph.graph:
                 call_graph.add_call(edge)
 
     return call_graph
@@ -147,6 +170,12 @@ def _bounded_bfs(graph: nx.DiGraph, start: str, depth: int) -> set[str]:
         seen.update(next_frontier)
         frontier = next_frontier
     return seen
+
+
+def _edge_callee_id(call_graph: CallGraph, edge: CallEdge) -> str:
+    if edge.callee_file_path is None:
+        return edge.callee_fqn
+    return call_graph.node_id_for_edge_endpoint(edge.callee_file_path, edge.callee_fqn)
 
 
 def _graphml_safe_mapping(data: dict) -> dict[str, str | int | float | bool]:

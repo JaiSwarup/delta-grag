@@ -7,6 +7,10 @@ from src.graph_updater import incremental_update
 from src.ingestion.diff_parser import parse_unified_diff
 
 
+def _node_id(path: str, fqn: str) -> str:
+    return f"{path}::{fqn}"
+
+
 def _write(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding="utf-8")
@@ -64,12 +68,18 @@ index 1111111..2222222 100644
 
     updated_graph, delta = incremental_update(call_graph, diff, tmp_path)
 
-    assert "helper_local" in updated_graph.graph
-    assert updated_graph.graph.has_edge("run", "helper_local")
-    assert updated_graph.graph.has_edge("helper_local", "util")
-    assert "helper" in updated_graph.graph  # untouched file remains
-    assert "helper_local" in delta.added_nodes
-    assert ("run", "util") in delta.removed_edges
+    assert _node_id("a.py", "helper_local") in updated_graph.graph
+    assert updated_graph.graph.has_edge(
+        _node_id("a.py", "run"),
+        _node_id("a.py", "helper_local"),
+    )
+    assert updated_graph.graph.has_edge(
+        _node_id("a.py", "helper_local"),
+        _node_id("a.py", "util"),
+    )
+    assert _node_id("b.py", "helper") in updated_graph.graph  # untouched file remains
+    assert _node_id("a.py", "helper_local") in delta.added_nodes
+    assert (_node_id("a.py", "run"), _node_id("a.py", "util")) in delta.removed_edges
     assert delta.unchanged_nodes > 0
 
 
@@ -103,9 +113,9 @@ index 1111111..0000000
 
     updated_graph, delta = incremental_update(call_graph, diff, tmp_path)
 
-    assert "old" not in updated_graph.graph
-    assert "keep" in updated_graph.graph
-    assert delta.removed_nodes == ["old"]
+    assert _node_id("obsolete.py", "old") not in updated_graph.graph
+    assert _node_id("keep.py", "keep") in updated_graph.graph
+    assert delta.removed_nodes == [_node_id("obsolete.py", "old")]
 
 
 def test_incremental_update_handles_renamed_files_by_updating_node_paths(
@@ -133,6 +143,12 @@ rename to new_name.py
 
     updated_graph, delta = incremental_update(call_graph, diff, tmp_path)
 
-    assert "run" in updated_graph.graph
-    assert updated_graph.graph.nodes["run"]["file_path"].replace("\\", "/").endswith("new_name.py")
+    run_id = _node_id("new_name.py", "run")
+
+    assert run_id in updated_graph.graph
+    assert (
+        updated_graph.graph.nodes[run_id]["file_path"]
+        .replace("\\", "/")
+        .endswith("new_name.py")
+    )
     assert delta.removed_nodes == []
