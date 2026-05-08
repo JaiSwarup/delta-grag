@@ -101,8 +101,32 @@ def extract_functions_from_module(
         for statement in statements:
             visit_statement(statement)
 
+    def _should_skip(node: ast.FunctionDef | ast.AsyncFunctionDef) -> bool:
+        """Return True if this function definition should be skipped.
+
+        Skipped cases (all produce a duplicate FQN for the same logical entity):
+        - ``@typing.overload`` / ``@t.overload`` / ``@overload`` stubs —
+          type-checker-only signatures whose concrete implementation follows.
+        - ``@<name>.setter`` / ``@<name>.deleter`` — property accessors that
+          share a name with the ``@property`` getter.
+        """
+        for dec in node.decorator_list:
+            if isinstance(dec, ast.Name) and dec.id == "overload":
+                return True
+            if isinstance(dec, ast.Attribute) and dec.attr in (
+                "overload",
+                "setter",
+                "deleter",
+            ):
+                return True
+        return False
+
     def visit_statement(statement: ast.stmt) -> None:
         if isinstance(statement, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            # Skip @overload stubs and property setters/deleters — they share
+            # a name with the real implementation and would produce duplicate FQNs.
+            if _should_skip(statement):
+                return
             start_line = getattr(statement, "lineno", 1)
             end_line = getattr(statement, "end_lineno", start_line)
             fqn = add_function(
@@ -155,15 +179,26 @@ def extract_functions_from_module(
                 visit_expression(child)
 
     visit_statements(module.body)
-    _validate_unique_fqns(functions, path)
+    functions = _deduplicate_fqns(functions, path)
     return functions
 
 
 __all__ = ["FunctionNode", "extract_functions", "extract_functions_from_module"]
 
 
-def _validate_unique_fqns(functions: list[FunctionNode], file_path: Path) -> None:
-    seen: set[str] = set()
+def _deduplicate_fqns(functions: list[FunctionNode], file_path: Path) -> list[FunctionNode]:
+    """Validate function spans and deduplicate by FQN.
+
+    Duplicates arise from legitimate Python patterns that the extractor cannot
+    fully suppress (e.g. closures that happen to share a name at different
+    nesting levels but collapse to the same FQN string).  Instead of crashing,
+    we keep the *first* occurrence (the canonical definition) and emit a
+    ``warnings.warn`` so callers are informed.
+    """
+    import warnings
+
+    seen: dict[str, int] = {}  # fqn -> index of first occurrence
+    result: list[FunctionNode] = []
     for function in functions:
         if function.start_line > function.end_line and not function.is_lambda:
             raise ValueError(
@@ -171,6 +206,13 @@ def _validate_unique_fqns(functions: list[FunctionNode], file_path: Path) -> Non
                 f"{function.start_line}..{function.end_line}"
             )
         if function.fqn in seen:
-            raise ValueError(f"Duplicate function FQN in {file_path}: {function.fqn}")
-        seen.add(function.fqn)
-
+            warnings.warn(
+                f"Duplicate function FQN '{function.fqn}' in {file_path} "
+                f"(line {function.start_line}); keeping first occurrence "
+                f"(line {result[seen[function.fqn]].start_line}).",
+                stacklevel=2,
+            )
+        else:
+            seen[function.fqn] = len(result)
+            result.append(function)
+    return result
