@@ -148,7 +148,7 @@ def extract_functions(file_path: str | Path) -> list[FunctionNode]:
 def _validate_unique_fqns(functions: list[FunctionNode], file_path: Path) -> None:
     seen: set[str] = set()
     for function in functions:
-        if function.start_line >= function.end_line and not function.is_lambda:
+        if function.start_line > function.end_line and not function.is_lambda:
             raise ValueError(
                 f"Invalid function span for {function.fqn} in {file_path}: "
                 f"{function.start_line}..{function.end_line}"

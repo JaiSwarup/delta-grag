@@ -74,3 +74,13 @@ def test_extract_functions_supports_async_functions(tmp_path: Path) -> None:
     assert [fn.fqn for fn in functions] == ["fetch"]
     assert functions[0].params == ["client", "url"]
     assert functions[0].start_line < functions[0].end_line
+
+
+def test_extract_functions_accepts_single_line_function(tmp_path: Path) -> None:
+    file_path = tmp_path / "single_line.py"
+    _write(file_path, "def with_yield(): yield 1\n")
+
+    functions = extract_functions(file_path)
+
+    assert [fn.fqn for fn in functions] == ["with_yield"]
+    assert functions[0].start_line == functions[0].end_line == 1

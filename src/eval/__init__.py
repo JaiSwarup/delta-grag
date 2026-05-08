@@ -25,6 +25,7 @@ from .metrics import (
     compute_token_reduction,
     save_metrics_table,
 )
+from .runner import EvalRunConfig, run_eval
 
 __all__ = [
     "AblationCorpus",
@@ -33,6 +34,7 @@ __all__ = [
     "DEFAULT_HEATMAP_PATH",
     "DEFAULT_MAX_CONCURRENCY",
     "DEFAULT_OUTPUT_CSV",
+    "EvalRunConfig",
     "EvalCase",
     "EvalResult",
     "build_metrics_table",
@@ -45,5 +47,6 @@ __all__ = [
     "load_ablation_corpus",
     "render_ablation_heatmap",
     "run_ablation_sweep",
+    "run_eval",
     "save_metrics_table",
 ]

@@ -15,6 +15,13 @@ from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
 
+from src.eval.runner import (
+    DEFAULT_OUTPUT_DIR,
+    DEFAULT_REPOS_DIR,
+    DEFAULT_SYSTEMS,
+    EvalRunConfig,
+    run_eval,
+)
 from src.github_api import GitHubIntegrationError, default_provider_from_env
 from src.pipeline.pr_orchestrator import (
     PipelineError,
@@ -255,6 +262,98 @@ def benchmark_command(
 
     completed = subprocess.run(command, check=False)
     raise typer.Exit(code=completed.returncode)
+
+
+@app.command("eval")
+def eval_command(
+    configs_dir: Optional[Path] = typer.Option(
+        None,
+        "--configs-dir",
+        help="Directory of code-review-graph-style eval YAML configs.",
+    ),
+    repo: list[str] = typer.Option(
+        [],
+        "--repo",
+        help="Repository config name to evaluate. Repeat for multiple repos.",
+    ),
+    system: list[str] = typer.Option(
+        list(DEFAULT_SYSTEMS),
+        "--system",
+        help="System adapter to run. Repeat for multiple systems.",
+    ),
+    output_dir: Path = typer.Option(
+        DEFAULT_OUTPUT_DIR,
+        "--output-dir",
+        help="Directory for metrics_table.csv, raw_runs.jsonl, and summary.md.",
+    ),
+    repos_dir: Path = typer.Option(
+        DEFAULT_REPOS_DIR,
+        "--repos-dir",
+        help="Directory where real open-source repositories are cloned/cached.",
+    ),
+    limit: Optional[int] = typer.Option(
+        None,
+        "--limit",
+        min=1,
+        help="Maximum number of configured commits to evaluate.",
+    ),
+    refresh: bool = typer.Option(
+        False,
+        "--refresh",
+        help="Fetch updates for existing cached repositories before evaluating.",
+    ),
+    k_up: int = typer.Option(2, "--k-up", min=0),
+    k_down: int = typer.Option(3, "--k-down", min=0),
+    max_nodes: int = typer.Option(180, "--max-nodes", min=1),
+    max_chars: int = typer.Option(12000, "--max-chars", min=256),
+) -> None:
+    """
+    Run LLM-free evaluation on real open-source project commits.
+    """
+    try:
+        df = run_eval(
+            EvalRunConfig(
+                configs_dir=configs_dir,
+                repos=tuple(repo),
+                systems=tuple(system),
+                output_dir=output_dir,
+                repos_dir=repos_dir,
+                limit=limit,
+                refresh=refresh,
+                k_up=k_up,
+                k_down=k_down,
+                max_nodes=max_nodes,
+                max_chars=max_chars,
+            )
+        )
+    except Exception as exc:
+        _print_error(str(exc))
+        raise typer.Exit(code=1) from exc
+
+    console.print(f"[green]Wrote evaluation results to[/green] {output_dir}")
+    if not df.empty:
+        summary = (
+            df.groupby("system", dropna=False)
+            .agg(
+                cases=("pr_id", "count"),
+                structural_recall=("structural_recall", "mean"),
+                token_reduction_pct=("token_reduction_pct", "mean"),
+            )
+            .reset_index()
+        )
+        table = Table(title="LLM-free Evaluation Summary")
+        table.add_column("System")
+        table.add_column("Cases", justify="right")
+        table.add_column("Structural Recall", justify="right")
+        table.add_column("Token Reduction %", justify="right")
+        for row in summary.to_dict(orient="records"):
+            table.add_row(
+                str(row["system"]),
+                str(int(row["cases"])),
+                f"{float(row['structural_recall']):.3f}",
+                f"{float(row['token_reduction_pct']):.1f}",
+            )
+        console.print(table)
 
 
 def main() -> None:

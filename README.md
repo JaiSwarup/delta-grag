@@ -356,6 +356,16 @@ The evaluation stack currently includes:
   - parser-aware aggregation
   - CSV output
   - heatmap generation
+- `src/eval/runner.py`
+  - LLM-free real-project evaluation using the sibling `code-review-graph` eval configs
+  - deterministic structural ground truth from changed-line anchors and graph impact
+  - baseline comparison for D-GRAG, diff-only, file-context, and semantic retrieval
+
+Regression note for future eval work:
+
+- Keep tests for single-line Python functions; real projects can contain valid functions where `start_line == end_line`.
+- Keep graph node file paths normalized to repository-relative paths before anchor resolution; BTP graph nodes may initially carry absolute paths while diffs use repo-relative paths.
+- Re-run at least one real configured project commit after touching extraction, diff parsing, anchor resolution, or eval path handling.
 
 ### Metrics table
 
