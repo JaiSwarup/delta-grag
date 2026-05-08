@@ -12,7 +12,12 @@ from typing import Sequence
 
 import pandas as pd
 
-from src.call_graph_builder import build_call_graph
+from src.call_graph_builder import (
+    build_call_graph,
+    graph_cache_key,
+    load_graph_from_cache,
+    save_graph_to_cache,
+)
 from src.eval.corpus import EvalCommitCase, iter_cases, load_configs
 from src.eval.ground_truth import build_structural_ground_truth
 from src.eval.materializer import MaterializedCommit, materialize_commit
@@ -27,6 +32,7 @@ from src.ingestion.diff_parser import parse_unified_diff
 
 DEFAULT_OUTPUT_DIR = Path("evaluate/results")
 DEFAULT_REPOS_DIR = Path("evaluate/test_repos")
+DEFAULT_GRAPH_CACHE_DIR = Path("evaluate/graph_cache")
 DEFAULT_SYSTEMS = ("dgrag", "diff_only", "file_context", "semantic_rag")
 
 
@@ -45,6 +51,10 @@ class EvalRunConfig:
     max_edges: int = 320
     max_per_anchor: int = 60
     max_chars: int = 12000
+    # --- Graph cache controls (all default to "caching enabled at default dir") ---
+    graph_cache_dir: str | Path | None = None  # None → DEFAULT_GRAPH_CACHE_DIR
+    no_graph_cache: bool = False               # True → skip read and write entirely
+    rebuild_graphs: bool = False               # True → ignore existing cache, overwrite
 
 
 def run_eval(config: EvalRunConfig | None = None) -> pd.DataFrame:
@@ -100,9 +110,9 @@ def _run_case(
     )
     parsed = parse_unified_diff(materialized.diff_text)
 
-    graph_start = perf_counter()
-    call_graph = build_call_graph(materialized.repo_path)
-    graph_build_ms = (perf_counter() - graph_start) * 1000.0
+    call_graph, graph_build_ms, graph_load_ms, graph_cache_hit, cache_path = (
+        _load_or_build_graph(materialized, cfg)
+    )
     graph = call_graph.graph
     _normalize_graph_file_paths(graph, materialized.repo_path)
 
@@ -136,12 +146,62 @@ def _run_case(
                 impacted_fqns=truth.impacted_fqns,
                 cross_file_fqns=truth.cross_file_fqns,
                 graph_build_ms=graph_build_ms,
+                graph_load_ms=graph_load_ms,
+                graph_cache_hit=graph_cache_hit,
+                graph_cache_path=cache_path,
                 graph_node_count=graph.number_of_nodes(),
                 graph_edge_count=graph.number_of_edges(),
                 unresolved_hunks=truth.unresolved_hunks,
             )
         )
     return rows
+
+
+def _load_or_build_graph(
+    materialized: MaterializedCommit,
+    cfg: EvalRunConfig,
+) -> tuple:
+    """Return ``(call_graph, build_ms, load_ms, cache_hit, cache_path_str)``.
+
+    Handles all three cache modes:
+    * ``no_graph_cache=True``  — always build, never read/write cache.
+    * ``rebuild_graphs=True``  — build fresh, overwrite existing cache entry.
+    * default                  — read from cache on hit, build and write on miss.
+    """
+    repo_path = materialized.repo_path
+    head_sha = materialized.head_sha
+
+    # Resolve cache directory
+    cache_dir: Path | None = None
+    if not cfg.no_graph_cache:
+        raw = cfg.graph_cache_dir if cfg.graph_cache_dir is not None else DEFAULT_GRAPH_CACHE_DIR
+        cache_dir = (
+            Path(raw).expanduser().resolve()
+            / repo_path.name
+        )
+        cache_dir.mkdir(parents=True, exist_ok=True)
+
+    key = graph_cache_key(repo_path, head_sha) if cache_dir is not None else ""
+    cache_path_str: str | None = str(cache_dir / f"{key}.json") if cache_dir else None
+
+    # --- Try cache read (unless disabled or rebuilding) --------------------------
+    if cache_dir is not None and not cfg.rebuild_graphs:
+        result = load_graph_from_cache(cache_dir, key, repo_root=repo_path)
+        if result is not None:
+            loaded_graph, load_ms = result
+            return loaded_graph, 0.0, load_ms, True, cache_path_str
+
+    # --- Cold build --------------------------------------------------------------
+    t0 = perf_counter()
+    call_graph = build_call_graph(repo_path)
+    build_ms = (perf_counter() - t0) * 1000.0
+
+    # --- Write cache (unless disabled) -------------------------------------------
+    if cache_dir is not None:
+        written_path = save_graph_to_cache(cache_dir, key, call_graph)
+        cache_path_str = str(written_path)
+
+    return call_graph, build_ms, 0.0, False, cache_path_str
 
 
 def _row_from_output(
@@ -153,6 +213,9 @@ def _row_from_output(
     impacted_fqns: Sequence[str],
     cross_file_fqns: Sequence[str],
     graph_build_ms: float,
+    graph_load_ms: float,
+    graph_cache_hit: bool,
+    graph_cache_path: str | None,
     graph_node_count: int,
     graph_edge_count: int,
     unresolved_hunks: int,
@@ -169,7 +232,10 @@ def _row_from_output(
         "expected_changed_files": case.expected_changed_files,
         "graph_nodes": graph_node_count,
         "graph_edges": graph_edge_count,
+        "graph_cache_hit": graph_cache_hit,
+        "graph_cache_path": graph_cache_path,
         "graph_build_ms": round(graph_build_ms, 3),
+        "graph_load_ms": round(graph_load_ms, 3),
         "retrieval_ms": round(output.runtime_ms, 3),
         "anchor_count": output.anchor_count,
         "unresolved_hunks": unresolved_hunks,
@@ -255,6 +321,7 @@ def _write_summary(df: pd.DataFrame, path: Path) -> None:
             f1=("f1", "mean"),
             token_reduction_pct=("token_reduction_pct", "mean"),
             graph_build_ms=("graph_build_ms", "mean"),
+            graph_load_ms=("graph_load_ms", "mean"),
             retrieval_ms=("retrieval_ms", "mean"),
         )
         .reset_index()
@@ -270,4 +337,11 @@ def _write_summary(df: pd.DataFrame, path: Path) -> None:
     path.write_text("\n".join(lines), encoding="utf-8")
 
 
-__all__ = ["DEFAULT_OUTPUT_DIR", "DEFAULT_REPOS_DIR", "DEFAULT_SYSTEMS", "EvalRunConfig", "run_eval"]
+__all__ = [
+    "DEFAULT_GRAPH_CACHE_DIR",
+    "DEFAULT_OUTPUT_DIR",
+    "DEFAULT_REPOS_DIR",
+    "DEFAULT_SYSTEMS",
+    "EvalRunConfig",
+    "run_eval",
+]

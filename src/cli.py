@@ -16,6 +16,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
 
 from src.eval.runner import (
+    DEFAULT_GRAPH_CACHE_DIR,
     DEFAULT_OUTPUT_DIR,
     DEFAULT_REPOS_DIR,
     DEFAULT_SYSTEMS,
@@ -306,6 +307,21 @@ def eval_command(
     k_down: int = typer.Option(3, "--k-down", min=0),
     max_nodes: int = typer.Option(180, "--max-nodes", min=1),
     max_chars: int = typer.Option(12000, "--max-chars", min=256),
+    graph_cache_dir: Optional[Path] = typer.Option(
+        None,
+        "--graph-cache-dir",
+        help="Directory for cached graph JSON files. Defaults to evaluate/graph_cache.",
+    ),
+    no_graph_cache: bool = typer.Option(
+        False,
+        "--no-graph-cache",
+        help="Disable graph caching entirely (always build from source).",
+    ),
+    rebuild_graphs: bool = typer.Option(
+        False,
+        "--rebuild-graphs",
+        help="Ignore existing cache entries and rebuild graphs from source.",
+    ),
 ) -> None:
     """
     Run LLM-free evaluation on real open-source project commits.
@@ -324,6 +340,9 @@ def eval_command(
                 k_down=k_down,
                 max_nodes=max_nodes,
                 max_chars=max_chars,
+                graph_cache_dir=graph_cache_dir,
+                no_graph_cache=no_graph_cache,
+                rebuild_graphs=rebuild_graphs,
             )
         )
     except Exception as exc:

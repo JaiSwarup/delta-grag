@@ -1,19 +1,38 @@
 """
-Standalone call graph wrapper and serializer.
+Standalone call graph wrapper, serializer, and builder.
 """
 
 from __future__ import annotations
 
+import ast
+import hashlib
 import json
+import logging
 from dataclasses import dataclass
 from pathlib import Path
+from time import perf_counter
 
 import networkx as nx
 
-from src.ast_extractor import FunctionNode, extract_functions
-from src.call_extractor import CallEdge, build_import_map, extract_call_edges
+from src.ast_extractor import FunctionNode, extract_functions, extract_functions_from_module
+from src.call_extractor import CallEdge, build_import_map, build_import_map_from_module, extract_call_edges
 from src.graph_identity import build_node_id
 from src.repo_manager import RepoSnapshot
+
+log = logging.getLogger(__name__)
+
+# Bump this string whenever the graph schema or extraction logic changes
+# so that stale cache entries are automatically invalidated.
+GRAPH_BUILDER_VERSION = "1"
+
+
+@dataclass
+class _FileExtraction:
+    """Holds the per-file parse results extracted in a single AST pass."""
+
+    file_path: Path
+    functions: list[FunctionNode]
+    import_map: dict[str, str]
 
 
 @dataclass
@@ -97,9 +116,17 @@ class CallGraph:
         output_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
     @classmethod
-    def load_json(cls, path: str | Path) -> "CallGraph":
+    def load_json(cls, path: str | Path, *, repo_root: str | Path | None = None) -> "CallGraph":
+        """Load a CallGraph from JSON.
+
+        Args:
+            path: Path to the JSON file written by ``save_json``.
+            repo_root: Optional repo root to set on the loaded graph.
+                       This is **required** for anchor resolution after loading
+                       from cache because ``save_json`` does not persist ``repo_root``.
+        """
         payload = json.loads(Path(path).expanduser().resolve().read_text(encoding="utf-8"))
-        graph = cls()
+        graph = cls(repo_root=repo_root)
         for node in payload.get("nodes", []):
             node_id = node["id"]
             attrs = {key: value for key, value in node.items() if key != "id"}
@@ -117,23 +144,39 @@ class CallGraph:
 
 
 def build_call_graph(snapshot: RepoSnapshot | str | Path) -> CallGraph:
+    """Build a call graph for *snapshot* using a single AST parse per file.
+
+    Each Python file is read and parsed once; functions, imports, and call
+    candidates are all extracted from that single ``ast.parse()`` result.
+    A structured ``DEBUG`` log line is emitted with per-phase timing so that
+    hot-paths are visible without additional instrumentation.
+    """
     root = _resolve_snapshot_root(snapshot)
+    t0 = perf_counter()
+
     python_files = sorted(root.rglob("*.py"))
+    discovery_ms = (perf_counter() - t0) * 1000.0
 
-    all_functions: list[FunctionNode] = []
-    for file_path in python_files:
-        all_functions.extend(extract_functions(file_path))
+    # --- Single parse per file ---------------------------------------------------
+    t1 = perf_counter()
+    extractions: list[_FileExtraction] = [_extract_file(fp) for fp in python_files]
+    all_functions: list[FunctionNode] = [fn for ex in extractions for fn in ex.functions]
+    extraction_ms = (perf_counter() - t1) * 1000.0
 
+    # --- Node insertion ----------------------------------------------------------
+    t2 = perf_counter()
     call_graph = CallGraph(repo_root=root)
     for function in all_functions:
         call_graph.add_function(function)
+    node_insertion_ms = (perf_counter() - t2) * 1000.0
 
-    for file_path in python_files:
-        import_map = build_import_map(file_path)
+    # --- Edge insertion (uses already-parsed import_map from extraction) ---------
+    t3 = perf_counter()
+    for ex in extractions:
         for edge in extract_call_edges(
-            file_path,
+            ex.file_path,
             all_functions=all_functions,
-            import_map=import_map,
+            import_map=ex.import_map,
         ):
             caller_id = call_graph.node_id_for_edge_endpoint(
                 edge.caller_file_path,
@@ -142,8 +185,84 @@ def build_call_graph(snapshot: RepoSnapshot | str | Path) -> CallGraph:
             callee_id = _edge_callee_id(call_graph, edge)
             if caller_id in call_graph.graph and callee_id in call_graph.graph:
                 call_graph.add_call(edge)
+    edge_insertion_ms = (perf_counter() - t3) * 1000.0
 
+    total_ms = (perf_counter() - t0) * 1000.0
+    log.debug(
+        "build_call_graph: files=%d nodes=%d edges=%d "
+        "discovery=%.1fms extraction=%.1fms node_insert=%.1fms edge_insert=%.1fms total=%.1fms",
+        len(python_files),
+        call_graph.graph.number_of_nodes(),
+        call_graph.graph.number_of_edges(),
+        discovery_ms,
+        extraction_ms,
+        node_insertion_ms,
+        edge_insertion_ms,
+        total_ms,
+    )
     return call_graph
+
+
+def graph_cache_key(repo_root: str | Path, head_sha: str) -> str:
+    """Return a stable cache-key string for a (repo, sha) pair.
+
+    The key encodes ``GRAPH_BUILDER_VERSION`` so it automatically changes
+    whenever the extraction logic is updated, preventing stale cache reads.
+    """
+    root = Path(repo_root).expanduser().resolve()
+    repo_name = root.name
+    raw = f"{repo_name}:{head_sha.strip()}:{GRAPH_BUILDER_VERSION}"
+    return hashlib.sha256(raw.encode()).hexdigest()
+
+
+def load_graph_from_cache(
+    cache_dir: str | Path,
+    key: str,
+    *,
+    repo_root: str | Path | None = None,
+) -> tuple[CallGraph, float] | None:
+    """Try to load a cached graph.
+
+    Returns ``(graph, load_ms)`` on a hit, or ``None`` on a miss.
+    ``repo_root`` is forwarded to :meth:`CallGraph.load_json` so that anchor
+    resolution works correctly after loading.
+    """
+    cache_path = Path(cache_dir) / f"{key}.json"
+    if not cache_path.exists():
+        return None
+    t0 = perf_counter()
+    graph = CallGraph.load_json(cache_path, repo_root=repo_root)
+    load_ms = (perf_counter() - t0) * 1000.0
+    log.debug("graph cache hit: %s (%.1fms)", cache_path, load_ms)
+    return graph, load_ms
+
+
+def save_graph_to_cache(
+    cache_dir: str | Path,
+    key: str,
+    graph: CallGraph,
+) -> Path:
+    """Persist *graph* to *cache_dir*/<key>.json and return the written path."""
+    cache_path = Path(cache_dir) / f"{key}.json"
+    graph.save_json(cache_path)
+    log.debug("graph cache written: %s", cache_path)
+    return cache_path
+
+
+# ---------------------------------------------------------------------------
+# Internal helpers
+# ---------------------------------------------------------------------------
+
+
+def _extract_file(file_path: Path) -> _FileExtraction:
+    """Read and parse *file_path* once, returning functions and import map."""
+    source_text = file_path.read_text(encoding="utf-8", errors="replace")
+    module = ast.parse(source_text, filename=str(file_path))
+    return _FileExtraction(
+        file_path=file_path,
+        functions=extract_functions_from_module(source_text, module, file_path),
+        import_map=build_import_map_from_module(module, file_path),
+    )
 
 
 def _resolve_snapshot_root(snapshot: RepoSnapshot | str | Path) -> Path:
@@ -188,4 +307,11 @@ def _graphml_safe_mapping(data: dict) -> dict[str, str | int | float | bool]:
     return safe
 
 
-__all__ = ["CallGraph", "build_call_graph"]
+__all__ = [
+    "GRAPH_BUILDER_VERSION",
+    "CallGraph",
+    "build_call_graph",
+    "graph_cache_key",
+    "load_graph_from_cache",
+    "save_graph_to_cache",
+]

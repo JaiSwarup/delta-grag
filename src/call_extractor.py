@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
 
-from src.ast_extractor import FunctionNode, extract_functions
+from src.ast_extractor import FunctionNode, extract_functions, extract_functions_from_module
 
 ResolutionMethod = Literal["direct", "import", "self", "unresolved"]
 
@@ -118,6 +118,19 @@ def build_import_map(file_path: str | Path) -> dict[str, str]:
     path = Path(file_path).expanduser().resolve()
     source_text = path.read_text(encoding="utf-8", errors="replace")
     module = ast.parse(source_text, filename=str(path))
+    return build_import_map_from_module(module, path)
+
+
+def build_import_map_from_module(
+    module: ast.Module,
+    file_path: str | Path,
+) -> dict[str, str]:
+    """Build an import alias map from a pre-parsed AST module.
+
+    This variant is used by the single-parse path in ``build_call_graph`` so
+    that the source file is read and parsed only once per build.
+    """
+    path = Path(file_path).expanduser().resolve()
     current_module = _module_name_from_path(path)
 
     aliases: dict[str, str] = {}
@@ -143,19 +156,28 @@ def build_import_map(file_path: str | Path) -> dict[str, str]:
 
 
 def extract_call_edges_for_repo(repo_root: str | Path) -> list[CallEdge]:
+    """Extract all call edges for a repository using a single parse per file."""
+    import ast as _ast
+
     root = Path(repo_root).expanduser().resolve()
-    functions: list[FunctionNode] = []
     python_files = sorted(root.rglob("*.py"))
+
+    # Single parse per file: collect functions and import maps together
+    all_functions: list[FunctionNode] = []
+    import_maps: dict[Path, dict[str, str]] = {}
     for file_path in python_files:
-        functions.extend(extract_functions(file_path))
+        source_text = file_path.read_text(encoding="utf-8", errors="replace")
+        module = _ast.parse(source_text, filename=str(file_path))
+        all_functions.extend(extract_functions_from_module(source_text, module, file_path))
+        import_maps[file_path] = build_import_map_from_module(module, file_path)
 
     edges: list[CallEdge] = []
     for file_path in python_files:
         edges.extend(
             extract_call_edges(
                 file_path,
-                all_functions=functions,
-                import_map=build_import_map(file_path),
+                all_functions=all_functions,
+                import_map=import_maps[file_path],
             )
         )
     return edges
@@ -281,6 +303,7 @@ def _normalize_relative_module(
 __all__ = [
     "CallEdge",
     "build_import_map",
+    "build_import_map_from_module",
     "extract_call_edges",
     "extract_call_edges_for_repo",
 ]

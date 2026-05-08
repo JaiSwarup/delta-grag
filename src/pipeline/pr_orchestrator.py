@@ -11,7 +11,12 @@ from pathlib import Path
 from time import perf_counter
 from typing import Any, Mapping, Protocol
 
-from src.call_graph_builder import build_call_graph
+from src.call_graph_builder import (
+    build_call_graph,
+    graph_cache_key,
+    load_graph_from_cache,
+    save_graph_to_cache,
+)
 from src.impact_subgraph import SubgraphStats, build_impact_subgraph
 from src.ingestion.diff_parser import DiffParseResult, parse_unified_diff
 from src.repo_manager import clone_at_sha
@@ -65,6 +70,7 @@ async def review_pr(
     config: ReviewConfig,
     cache_dir: str | Path,
     provider: PRInfoProvider,
+    graph_cache_dir: str | Path | None = None,
 ) -> PipelineResult:
     parsed_url = parse_github_pr_url(pr_url)
     cache_root = Path(cache_dir).expanduser().resolve()
@@ -100,11 +106,31 @@ async def review_pr(
             "parse_diff_ms",
             lambda: parse_unified_diff(pr_info.diff_text),
         )
-        call_graph = _timed(
-            timings,
-            "build_graph_ms",
-            lambda: build_call_graph(head_snapshot),
+
+        # --- Graph cache: check for existing graph for this repo+SHA -----------
+        head_snapshot_path = head_snapshot.local_path.resolve()
+        _graph_cache_dir = (
+            Path(graph_cache_dir).expanduser().resolve()
+            if graph_cache_dir is not None
+            else cache_root / "graphs" / head_snapshot_path.name
         )
+        _graph_cache_dir.mkdir(parents=True, exist_ok=True)
+        _graph_key = graph_cache_key(head_snapshot_path, pr_info.head_sha)
+
+        _cached = load_graph_from_cache(_graph_cache_dir, _graph_key, repo_root=head_snapshot_path)
+        if _cached is not None:
+            call_graph, _graph_load_ms = _cached
+            timings["build_graph_ms"] = 0.0
+            timings["graph_load_ms"] = _graph_load_ms
+        else:
+            call_graph = _timed(
+                timings,
+                "build_graph_ms",
+                lambda: build_call_graph(head_snapshot),
+            )
+            timings["graph_load_ms"] = 0.0
+            save_graph_to_cache(_graph_cache_dir, _graph_key, call_graph)
+        # -----------------------------------------------------------------------
         anchors = _timed(
             timings,
             "resolve_anchors_ms",

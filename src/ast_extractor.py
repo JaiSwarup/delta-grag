@@ -28,6 +28,20 @@ def extract_functions(file_path: str | Path) -> list[FunctionNode]:
     path = Path(file_path).expanduser().resolve()
     source_text = path.read_text(encoding="utf-8", errors="replace")
     module = ast.parse(source_text, filename=str(path))
+    return extract_functions_from_module(source_text, module, path)
+
+
+def extract_functions_from_module(
+    source_text: str,
+    module: ast.Module,
+    file_path: str | Path,
+) -> list[FunctionNode]:
+    """Extract functions from a pre-parsed AST module.
+
+    This variant is used by the single-parse path in ``build_call_graph`` so
+    that the source file is read and parsed only once per build.
+    """
+    path = Path(file_path).expanduser().resolve()
     source_lines = source_text.splitlines()
 
     functions: list[FunctionNode] = []
@@ -145,6 +159,9 @@ def extract_functions(file_path: str | Path) -> list[FunctionNode]:
     return functions
 
 
+__all__ = ["FunctionNode", "extract_functions", "extract_functions_from_module"]
+
+
 def _validate_unique_fqns(functions: list[FunctionNode], file_path: Path) -> None:
     seen: set[str] = set()
     for function in functions:
@@ -157,5 +174,3 @@ def _validate_unique_fqns(functions: list[FunctionNode], file_path: Path) -> Non
             raise ValueError(f"Duplicate function FQN in {file_path}: {function.fqn}")
         seen.add(function.fqn)
 
-
-__all__ = ["FunctionNode", "extract_functions"]
