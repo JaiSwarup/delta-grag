@@ -1,30 +1,41 @@
-# D-GRAG Description
+# D-GRAG Methodology
 
-**Delta-Graph Retrieval-Augmented Generation (D-GRAG)** is a structurally grounded framework designed for automated code review. Unlike traditional Al systems that rely on textual or semantic similarity (embedding-based RAG), D-GRAG constructs **Dynamic Differential Subgraphs** tailored specifically to each Pull Request (PR). It prioritizes **architectural reachability** within a static call graph to provide Large Language Models (LLMs) with a targeted, dependency-aware reasoning window.
+Delta-Graph Retrieval-Augmented Generation (D-GRAG) is a structurally bounded PR review pipeline.  
+The implementation focuses on deterministic, PR-scoped retrieval rather than global semantic similarity search.
 
----
+## Retrieval Formulation
 
-## Methodology
+- Repository is modeled as a directed call graph `G=(V,E)` where `u -> v` means `u` calls `v`.
+- Given PR delta lines `Δ`, anchors are functions whose spans intersect `Δ`.
+- Retrieved context is an impact subgraph around anchors using bounded bidirectional BFS:
+  - `k_up`: caller hops
+  - `k_down`: callee hops
+  - hard caps: `max_nodes`, `max_edges`, optional per-anchor and time budgets
 
-The D-GRAG framework follows a specific technical pipeline to generate reviews:
+## Implemented Pipeline
 
-### 1. Graph Construction
+1. Parse unified diff and collect changed lines/files.
+2. Resolve anchors from changed hunks against function spans in the static call graph.
+3. Extract bounded impact subgraph with deterministic node discovery order.
+4. Linearize context with explicit sections for modified nodes, callers, and callees.
+5. Optionally run full review generation, then normalize, dedupe, and score findings.
 
-* **Parsing:** The system uses **Tree-sitter** to parse repository files and extract function-level AST nodes.
+## Robustness Features
 
-* Static Call Graph: It builds a directed graph $G=(V,E)$ where $V$ represents functions and $E$ represents call dependencies.
+- Deterministic traversal and serialization for reproducible outputs.
+- Explicit cutoff/truncation metadata to avoid silent context collapse.
+- Retry/backoff behavior on transient GitHub and clone/network failures.
+- Timeout-controlled webhook execution.
 
-### 2. Anchor Identification & Traversal
+## Offline Evaluation (MVP)
 
-* **Anchor Set (A):** The system identifies functions directly modified in the PR.
+The repository includes a standalone offline evaluation harness in `src/eval` with deterministic fixtures:
 
-* **Bounded Bidirectional Traversal:** It performs a Breadth-First Search (BFS) from these anchors to a specified depth: **k** (upstream/callers) and **m** (downstream/callees).
+- `impact_accuracy`: precision/recall/F1 on impacted-function retrieval.
+- `token_efficiency`: context reduction relative to baseline token size.
 
-### 3. Subgraph Extraction & Linearization
+Run example:
 
-* **Impact Subgraph:** A differential subgraph is created, containing only the anchor nodes and their structurally reachable neighbors.
-
-* **Linearization:** To suit LLM processing, the graph is serialized using BFS order to preserve structural locality.
-
-* **Prompt Construction:** The LLM receives a structured prompt containing the modified logic, upstream impact, and downstream propagation regions
-Design a complete modular architecture for Delta-GRAG (D-GRAG).
+```bash
+uv run python -c "from src.eval.runner import run_benchmarks; run_benchmarks(fixture_path='tests/fixtures/eval_cases.json', output_dir='artifacts/eval')"
+```

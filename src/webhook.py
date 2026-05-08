@@ -8,6 +8,7 @@ import hashlib
 import hmac
 import logging
 import os
+import asyncio
 from dataclasses import dataclass
 from typing import Any, Mapping, Protocol
 
@@ -34,6 +35,7 @@ class WebhookSettings:
     cache_dir: str = ".cache/dgrag"
     default_k_up: int = 2
     default_k_down: int = 3
+    review_timeout_seconds: int = 300
 
     @classmethod
     def from_env(cls) -> "WebhookSettings":
@@ -52,6 +54,7 @@ class WebhookSettings:
 
         default_k_up = _read_int_env("DGRAG_DEPTH_K", 2)
         default_k_down = _read_int_env("DGRAG_DEPTH_M", 3)
+        review_timeout_seconds = _read_int_env("DGRAG_REVIEW_TIMEOUT_SECONDS", 300)
 
         return cls(
             github_webhook_secret=secret,
@@ -59,6 +62,7 @@ class WebhookSettings:
             cache_dir=cache_dir,
             default_k_up=default_k_up,
             default_k_down=default_k_down,
+            review_timeout_seconds=review_timeout_seconds,
         )
 
 
@@ -257,14 +261,23 @@ def create_app(
         )
 
         try:
-            result = await resolved_review_runner(
-                pr_url=pr_url,
-                config=config,
-                cache_dir=resolved_settings.cache_dir,
-                provider=resolved_provider,
+            result = await asyncio.wait_for(
+                resolved_review_runner(
+                    pr_url=pr_url,
+                    config=config,
+                    cache_dir=resolved_settings.cache_dir,
+                    provider=resolved_provider,
+                ),
+                timeout=float(resolved_settings.review_timeout_seconds),
             )
             comment_body = resolved_commenter.build_review_comment(result.review)
             await resolved_commenter.post_review_comment(pr_url, comment_body)
+        except TimeoutError as exc:
+            logger.exception("Webhook review timed out.")
+            raise HTTPException(
+                status_code=504,
+                detail="Review timed out before completion.",
+            ) from exc
         except GitHubIntegrationError as exc:
             logger.exception("GitHub integration failure while processing webhook.")
             raise HTTPException(status_code=502, detail=str(exc)) from exc

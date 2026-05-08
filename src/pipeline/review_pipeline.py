@@ -595,6 +595,8 @@ def _build_metadata(
             "node_order_count": len(node_order),
             "cutoff_reasons": list(impact_subgraph.graph.get("cutoff_reasons", ())),
             "cutoff_reason_count": len(impact_subgraph.graph.get("cutoff_reasons", ())),
+            "truncated": bool(impact_subgraph.graph.get("truncated", False)),
+            "budget": dict(impact_subgraph.graph.get("budget", {})),
         },
         "review": {
             "run_full_review": cfg.run_full_review,

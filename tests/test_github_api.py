@@ -187,6 +187,24 @@ def test_fetch_pr_diff_sync_raises_for_url_error(monkeypatch) -> None:
     assert "GitHub diff fetch failed" in str(exc_info.value)
 
 
+def test_fetch_pr_diff_sync_retries_transient_http_error(monkeypatch) -> None:
+    calls = {"count": 0}
+
+    def _flaky(request, timeout=30):
+        calls["count"] += 1
+        if calls["count"] == 1:
+            raise _FakeHTTPError("transient", code=503)
+        return _FakeResponse(b"diff --git a/x b/x\n")
+
+    monkeypatch.setattr("src.github_api.urlopen", _flaky)
+
+    service = GitHubPRService("secret-token", max_retries=2, retry_backoff_seconds=0)
+    text = service._fetch_pr_diff_sync("https://example.test/diff")
+
+    assert "diff --git" in text
+    assert calls["count"] == 2
+
+
 def test_get_pr_info_sync_returns_pr_info(monkeypatch) -> None:
     pull = _make_pull()
     repo = _FakeRepo(pull=pull)

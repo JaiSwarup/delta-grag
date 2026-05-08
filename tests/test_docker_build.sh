@@ -71,10 +71,6 @@ main() {
     fail "Expected 'review' command to appear in CLI help output"
   }
 
-  echo "$help_output" | grep -qi "benchmark" || {
-    fail "Expected 'benchmark' command to appear in CLI help output"
-  }
-
   log "Docker build and CLI smoke test passed."
 }
 

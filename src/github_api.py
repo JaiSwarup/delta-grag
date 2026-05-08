@@ -7,6 +7,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+from time import sleep
 from dataclasses import dataclass
 from typing import Any, Mapping
 from urllib.error import HTTPError, URLError
@@ -46,13 +47,20 @@ class GitHubPRService(PRInfoProvider):
     """
 
     def __init__(
-        self, token: str, *, api_base_url: str = "https://api.github.com"
+        self,
+        token: str,
+        *,
+        api_base_url: str = "https://api.github.com",
+        max_retries: int = 2,
+        retry_backoff_seconds: float = 0.5,
     ) -> None:
         token = str(token).strip()
         if not token:
             raise ValueError("token must be a non-empty string")
         self._token = token
         self._api_base_url = api_base_url.rstrip("/")
+        self._max_retries = max(0, int(max_retries))
+        self._retry_backoff_seconds = max(0.0, float(retry_backoff_seconds))
         self._client = Github(login_or_token=token)
 
     @classmethod
@@ -71,8 +79,14 @@ class GitHubPRService(PRInfoProvider):
         full_name = f"{owner}/{repo_name}"
 
         try:
-            repo = self._client.get_repo(full_name)
-            pull = repo.get_pull(pr_number)
+            repo = self._retry_github_call(
+                lambda: self._client.get_repo(full_name),
+                operation="get_repo",
+            )
+            pull = self._retry_github_call(
+                lambda: repo.get_pull(pr_number),
+                operation="get_pull",
+            )
         except GithubException as exc:
             raise GitHubIntegrationError(
                 f"Failed to fetch PR metadata for `{pr_url}`: {exc.data if hasattr(exc, 'data') else exc}"
@@ -132,8 +146,7 @@ class GitHubPRService(PRInfoProvider):
         )
 
         try:
-            with urlopen(request, timeout=30) as response:
-                body = response.read()
+            body = self._retry_diff_fetch(request)
         except HTTPError as exc:
             detail = exc.read().decode("utf-8", errors="replace")
             raise GitHubIntegrationError(
@@ -162,9 +175,18 @@ class GitHubPRService(PRInfoProvider):
             raise ValueError("body must be a non-empty string")
 
         try:
-            repo = self._client.get_repo(full_name)
-            issue = repo.get_issue(number=pr_number)
-            issue.create_comment(text)
+            repo = self._retry_github_call(
+                lambda: self._client.get_repo(full_name),
+                operation="get_repo",
+            )
+            issue = self._retry_github_call(
+                lambda: repo.get_issue(number=pr_number),
+                operation="get_issue",
+            )
+            self._retry_github_call(
+                lambda: issue.create_comment(text),
+                operation="create_comment",
+            )
         except GithubException as exc:
             raise GitHubIntegrationError(
                 f"Failed to post PR comment for `{pr_url}`: {exc.data if hasattr(exc, 'data') else exc}"
@@ -218,6 +240,45 @@ class GitHubPRService(PRInfoProvider):
             )
 
         return "\n".join(lines)
+
+    def _retry_diff_fetch(self, request: Request) -> bytes:
+        attempts = self._max_retries + 1
+        for attempt in range(1, attempts + 1):
+            try:
+                with urlopen(request, timeout=30) as response:
+                    return response.read()
+            except HTTPError as exc:
+                if not _is_retryable_http_code(getattr(exc, "code", 0)) or attempt >= attempts:
+                    detail = exc.read().decode("utf-8", errors="replace")
+                    raise GitHubIntegrationError(
+                        f"GitHub diff fetch failed with HTTP {exc.code}: {detail}"
+                    ) from exc
+            except URLError as exc:
+                if attempt >= attempts:
+                    raise GitHubIntegrationError(f"GitHub diff fetch failed: {exc}") from exc
+            self._sleep_with_backoff(attempt)
+        raise GitHubIntegrationError("GitHub diff fetch failed after retries.")
+
+    def _retry_github_call(self, fn, *, operation: str):
+        attempts = self._max_retries + 1
+        for attempt in range(1, attempts + 1):
+            try:
+                return fn()
+            except GithubException as exc:
+                status = int(getattr(exc, "status", 0) or 0)
+                if not _is_retryable_http_code(status) or attempt >= attempts:
+                    raise
+            self._sleep_with_backoff(attempt)
+        raise GitHubIntegrationError(f"GitHub operation failed after retries: {operation}")
+
+    def _sleep_with_backoff(self, attempt: int) -> None:
+        if self._retry_backoff_seconds <= 0:
+            return
+        sleep(self._retry_backoff_seconds * (2 ** (attempt - 1)))
+
+
+def _is_retryable_http_code(status_code: int) -> bool:
+    return status_code in {408, 409, 425, 429, 500, 502, 503, 504}
 
 
 def default_provider_from_env(env_var: str = "GITHUB_TOKEN") -> GitHubPRService:
