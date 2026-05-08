@@ -1,0 +1,621 @@
+{
+  "cases": [
+    {
+      "id": "flask-d718ecf6d3",
+      "repo": "flask",
+      "repo_url": "https://github.com/pallets/flask",
+      "base_sha": "0ce27278d234c13ce00019540ff8e9891542d1f2",
+      "head_sha": "d718ecf6d3dfc4656d262154c59672437c1ea075",
+      "changed_files": [
+        "src/flask/app.py",
+        "src/flask/sansio/app.py"
+      ],
+      "retrieved_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "manual_impacted_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "graph_tokens": 322,
+      "baseline_tokens": 19990,
+      "recall": 1.0,
+      "context_reduction": 0.9838919459729865,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.995167583791896
+    },
+    {
+      "id": "flask-fac630379d",
+      "repo": "flask",
+      "repo_url": "https://github.com/pallets/flask",
+      "base_sha": "5512a6688193758a24ef0b6825217030da9fed21",
+      "head_sha": "fac630379d31baaa1667894c2b5613304285a4bb",
+      "changed_files": [
+        "src/flask/app.py",
+        "src/flask/helpers.py"
+      ],
+      "retrieved_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "manual_impacted_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "graph_tokens": 322,
+      "baseline_tokens": 17515,
+      "recall": 1.0,
+      "context_reduction": 0.9816157579217814,
+      "anchor_resolution_rate": 1.3333333333333333,
+      "score": 0.9944847273765344
+    },
+    {
+      "id": "flask-7b0088693e",
+      "repo": "flask",
+      "repo_url": "https://github.com/pallets/flask",
+      "base_sha": "a411a2434b09d9cbaa4074232b2c247d591bb655",
+      "head_sha": "7b0088693ece1bd3a9238a6fdf56ed8df7a4d43b",
+      "changed_files": [
+        "src/flask/app.py"
+      ],
+      "retrieved_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "manual_impacted_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "graph_tokens": 322,
+      "baseline_tokens": 12209,
+      "recall": 1.0,
+      "context_reduction": 0.9736260135965271,
+      "anchor_resolution_rate": 4.0,
+      "score": 0.9920878040789581
+    },
+    {
+      "id": "flask-11c45eeba3",
+      "repo": "flask",
+      "repo_url": "https://github.com/pallets/flask",
+      "base_sha": "b78b5a210bde49e7e04b62a2a4f453ca10e0048c",
+      "head_sha": "11c45eeba3b5bcf06b84f4e864862f1019a3faa3",
+      "changed_files": [
+        "src/flask/app.py"
+      ],
+      "retrieved_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "manual_impacted_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "graph_tokens": 322,
+      "baseline_tokens": 12209,
+      "recall": 1.0,
+      "context_reduction": 0.9736260135965271,
+      "anchor_resolution_rate": 4.0,
+      "score": 0.9920878040789581
+    },
+    {
+      "id": "flask-438edcdf01",
+      "repo": "flask",
+      "repo_url": "https://github.com/pallets/flask",
+      "base_sha": "b7c1290528f907c9f41afcdfd33a2227c73e26d3",
+      "head_sha": "438edcdf01c392619449a6bdbb18f6cf72ef7bb9",
+      "changed_files": [
+        "src/flask/app.py",
+        "tests/test_helpers.py"
+      ],
+      "retrieved_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "manual_impacted_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "graph_tokens": 322,
+      "baseline_tokens": 12209,
+      "recall": 1.0,
+      "context_reduction": 0.9736260135965271,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.9920878040789581
+    },
+    {
+      "id": "flask-65271c105f",
+      "repo": "flask",
+      "repo_url": "https://github.com/pallets/flask",
+      "base_sha": "90967ccb9ab1f757c2637a68ea2e16b8da2605f4",
+      "head_sha": "65271c105f7c247ecffc9a7121815276e092bd10",
+      "changed_files": [
+        "src/flask/app.py"
+      ],
+      "retrieved_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "manual_impacted_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "graph_tokens": 322,
+      "baseline_tokens": 12209,
+      "recall": 1.0,
+      "context_reduction": 0.9736260135965271,
+      "anchor_resolution_rate": 4.0,
+      "score": 0.9920878040789581
+    },
+    {
+      "id": "flask-9532cba45d",
+      "repo": "flask",
+      "repo_url": "https://github.com/pallets/flask",
+      "base_sha": "0bc7356ce1ae11e633426902aba76d525f4523da",
+      "head_sha": "9532cba45d2339e90ebf04f178b1e4f2064e7328",
+      "changed_files": [
+        "src/flask/app.py"
+      ],
+      "retrieved_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "manual_impacted_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "graph_tokens": 322,
+      "baseline_tokens": 12209,
+      "recall": 1.0,
+      "context_reduction": 0.9736260135965271,
+      "anchor_resolution_rate": 4.0,
+      "score": 0.9920878040789581
+    },
+    {
+      "id": "flask-cc66213e57",
+      "repo": "flask",
+      "repo_url": "https://github.com/pallets/flask",
+      "base_sha": "3dc6db9d0cfddcfb971c382b014bb56ac3761d3c",
+      "head_sha": "cc66213e579d6b35d9951c21b685d0078f373c44",
+      "changed_files": [
+        "src/flask/app.py"
+      ],
+      "retrieved_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "manual_impacted_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "graph_tokens": 322,
+      "baseline_tokens": 12209,
+      "recall": 1.0,
+      "context_reduction": 0.9736260135965271,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.9920878040789581
+    },
+    {
+      "id": "flask-0d8c8ba71b",
+      "repo": "flask",
+      "repo_url": "https://github.com/pallets/flask",
+      "base_sha": "9c3deeee963e62dfb60c9343fad4ec2ec752fdba",
+      "head_sha": "0d8c8ba71bc6362e6ea9af08146dc97e1a0a8abc",
+      "changed_files": [
+        "src/flask/app.py"
+      ],
+      "retrieved_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "manual_impacted_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "graph_tokens": 322,
+      "baseline_tokens": 12209,
+      "recall": 1.0,
+      "context_reduction": 0.9736260135965271,
+      "anchor_resolution_rate": 4.0,
+      "score": 0.9920878040789581
+    },
+    {
+      "id": "flask-a411a2434b",
+      "repo": "flask",
+      "repo_url": "https://github.com/pallets/flask",
+      "base_sha": "daca74d93a0edc458e618136de7d14803f06bc28",
+      "head_sha": "a411a2434b09d9cbaa4074232b2c247d591bb655",
+      "changed_files": [
+        "src/flask/ctx.py"
+      ],
+      "retrieved_nodes": [
+        "src/flask/ctx.py::_AppCtxGlobals.__delattr__",
+        "src/flask/ctx.py::_AppCtxGlobals.__getattr__",
+        "src/flask/ctx.py::_AppCtxGlobals.__setattr__",
+        "src/flask/ctx.py::_AppCtxGlobals.get"
+      ],
+      "manual_impacted_nodes": [
+        "src/flask/ctx.py::_AppCtxGlobals.__getattr__",
+        "src/flask/ctx.py::_AppCtxGlobals.__setattr__",
+        "src/flask/ctx.py::_AppCtxGlobals.__delattr__",
+        "src/flask/ctx.py::_AppCtxGlobals.get"
+      ],
+      "graph_tokens": 271,
+      "baseline_tokens": 3759,
+      "recall": 1.0,
+      "context_reduction": 0.9279063580739558,
+      "anchor_resolution_rate": 1.0,
+      "score": 0.9783719074221867
+    },
+    {
+      "id": "httpx-4189b7f051",
+      "repo": "httpx",
+      "repo_url": "https://github.com/encode/httpx",
+      "base_sha": "e70d0b08c929e5140e38aa92a419de0c6d494148",
+      "head_sha": "4189b7f051c6c51ce74c3bee1a5f269f9c50c6b2",
+      "changed_files": [
+        "httpx/_client.py",
+        "httpx/_models.py"
+      ],
+      "retrieved_nodes": [
+        "httpx/_client.py::BoundSyncStream.__init__",
+        "httpx/_client.py::_is_https_redirect",
+        "httpx/_client.py::_port_or_default",
+        "httpx/_client.py::_same_origin",
+        "httpx/_client.py::BaseClient._redirect_headers",
+        "httpx/_client.py::BaseClient._build_redirect_request"
+      ],
+      "manual_impacted_nodes": [
+        "httpx/_client.py::_is_https_redirect",
+        "httpx/_client.py::_port_or_default",
+        "httpx/_client.py::_same_origin",
+        "httpx/_client.py::BoundSyncStream.__init__",
+        "httpx/_client.py::BaseClient._redirect_headers"
+      ],
+      "graph_tokens": 363,
+      "baseline_tokens": 20709,
+      "recall": 1.0,
+      "context_reduction": 0.9824713892510503,
+      "anchor_resolution_rate": 1.0,
+      "score": 0.994741416775315
+    },
+    {
+      "id": "httpx-15e21e9ea3",
+      "repo": "httpx",
+      "repo_url": "https://github.com/encode/httpx",
+      "base_sha": "80960fa31918d7663c3f4c3ad61661cf0e80628f",
+      "head_sha": "15e21e9ea3cad4f06e22a7e704aabefdf43d2e29",
+      "changed_files": [
+        "httpx/_client.py"
+      ],
+      "retrieved_nodes": [
+        "httpx/_client.py::BoundSyncStream.__init__",
+        "httpx/_client.py::_is_https_redirect",
+        "httpx/_client.py::_port_or_default",
+        "httpx/_client.py::_same_origin",
+        "httpx/_client.py::BaseClient._redirect_headers",
+        "httpx/_client.py::BaseClient._build_redirect_request"
+      ],
+      "manual_impacted_nodes": [
+        "httpx/_client.py::_is_https_redirect",
+        "httpx/_client.py::_port_or_default",
+        "httpx/_client.py::_same_origin",
+        "httpx/_client.py::BoundSyncStream.__init__",
+        "httpx/_client.py::BaseClient._redirect_headers"
+      ],
+      "graph_tokens": 363,
+      "baseline_tokens": 11737,
+      "recall": 1.0,
+      "context_reduction": 0.9690721649484536,
+      "anchor_resolution_rate": 4.0,
+      "score": 0.990721649484536
+    },
+    {
+      "id": "httpx-364697efca",
+      "repo": "httpx",
+      "repo_url": "https://github.com/encode/httpx",
+      "base_sha": "89102021fcb44f6c3fab6304e5f951692723c908",
+      "head_sha": "364697efcafe39290358745da8be451a40a3eab2",
+      "changed_files": [
+        "httpx/_exceptions.py",
+        "httpx/_urls.py",
+        "tests/test_content.py"
+      ],
+      "retrieved_nodes": [
+        "httpx/_exceptions.py::HTTPError.__init__",
+        "httpx/_exceptions.py::HTTPError.request",
+        "httpx/_exceptions.py::HTTPStatusError.__init__",
+        "httpx/_exceptions.py::RequestError.__init__"
+      ],
+      "manual_impacted_nodes": [
+        "httpx/_exceptions.py::HTTPError.__init__",
+        "httpx/_exceptions.py::HTTPError.request",
+        "httpx/_exceptions.py::RequestError.__init__",
+        "httpx/_exceptions.py::HTTPStatusError.__init__"
+      ],
+      "graph_tokens": 255,
+      "baseline_tokens": 7117,
+      "recall": 1.0,
+      "context_reduction": 0.9641702964732332,
+      "anchor_resolution_rate": 1.0,
+      "score": 0.9892510889419699
+    },
+    {
+      "id": "httpx-6622553979",
+      "repo": "httpx",
+      "repo_url": "https://github.com/encode/httpx",
+      "base_sha": "12be5c44caa7a34bfe19f82eace5150ddeba2612",
+      "head_sha": "66225539796d819b5114ead2fd5e4d61865ab708",
+      "changed_files": [
+        "httpx/_models.py"
+      ],
+      "retrieved_nodes": [
+        "httpx/_models.py::_is_known_encoding",
+        "httpx/_models.py::_normalize_header_key",
+        "httpx/_models.py::_normalize_header_value",
+        "httpx/_models.py::_parse_content_type_charset",
+        "httpx/_models.py::Response.encoding",
+        "httpx/_models.py::Headers.__init__",
+        "httpx/_models.py::Response.charset_encoding"
+      ],
+      "manual_impacted_nodes": [
+        "httpx/_models.py::_is_known_encoding",
+        "httpx/_models.py::_normalize_header_key",
+        "httpx/_models.py::_normalize_header_value",
+        "httpx/_models.py::_parse_content_type_charset",
+        "httpx/_models.py::Headers.__init__"
+      ],
+      "graph_tokens": 420,
+      "baseline_tokens": 8972,
+      "recall": 1.0,
+      "context_reduction": 0.9531876950512707,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.9859563085153812
+    },
+    {
+      "id": "httpx-ae1b9f6623",
+      "repo": "httpx",
+      "repo_url": "https://github.com/encode/httpx",
+      "base_sha": "ca097c96f97d8d2a5da09b8ca736c7e78a2467f6",
+      "head_sha": "ae1b9f66238f75ced3ced5e4485408435de10768",
+      "changed_files": [
+        "httpx/__init__.py",
+        "httpx/_auth.py"
+      ],
+      "retrieved_nodes": [
+        "httpx/_auth.py::Auth.async_auth_flow",
+        "httpx/_auth.py::Auth.auth_flow",
+        "httpx/_auth.py::Auth.sync_auth_flow",
+        "httpx/_auth.py::FunctionAuth.__init__"
+      ],
+      "manual_impacted_nodes": [
+        "httpx/_auth.py::Auth.auth_flow",
+        "httpx/_auth.py::Auth.sync_auth_flow",
+        "httpx/_auth.py::Auth.async_auth_flow",
+        "httpx/_auth.py::FunctionAuth.__init__"
+      ],
+      "graph_tokens": 255,
+      "baseline_tokens": 2902,
+      "recall": 1.0,
+      "context_reduction": 0.9121295658166781,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.9736388697450035
+    },
+    {
+      "id": "httpx-83a85189c7",
+      "repo": "httpx",
+      "repo_url": "https://github.com/encode/httpx",
+      "base_sha": "66225539796d819b5114ead2fd5e4d61865ab708",
+      "head_sha": "83a85189c79708b732d04e7b906e388fb0fbde94",
+      "changed_files": [
+        "httpx/_models.py",
+        "httpx/_utils.py"
+      ],
+      "retrieved_nodes": [
+        "httpx/_models.py::_is_known_encoding",
+        "httpx/_models.py::_normalize_header_key",
+        "httpx/_models.py::_normalize_header_value",
+        "httpx/_models.py::_parse_content_type_charset",
+        "httpx/_models.py::Response.encoding",
+        "httpx/_models.py::Headers.__init__",
+        "httpx/_models.py::Response.charset_encoding"
+      ],
+      "manual_impacted_nodes": [
+        "httpx/_models.py::_is_known_encoding",
+        "httpx/_models.py::_normalize_header_key",
+        "httpx/_models.py::_normalize_header_value",
+        "httpx/_models.py::_parse_content_type_charset",
+        "httpx/_models.py::Headers.__init__"
+      ],
+      "graph_tokens": 420,
+      "baseline_tokens": 10999,
+      "recall": 1.0,
+      "context_reduction": 0.9618147104282208,
+      "anchor_resolution_rate": 0.8,
+      "score": 0.9685444131284662
+    },
+    {
+      "id": "httpx-a33c87852b",
+      "repo": "httpx",
+      "repo_url": "https://github.com/encode/httpx",
+      "base_sha": "ce7e14da27abba6574be9b3ea7cd5990556a9343",
+      "head_sha": "a33c87852b8a0dddc65e5f739af1e0a6fca4b91f",
+      "changed_files": [
+        "httpx/_models.py",
+        "httpx/_types.py"
+      ],
+      "retrieved_nodes": [
+        "httpx/_models.py::_is_known_encoding",
+        "httpx/_models.py::_normalize_header_key",
+        "httpx/_models.py::_normalize_header_value",
+        "httpx/_models.py::_parse_content_type_charset",
+        "httpx/_models.py::Response.encoding",
+        "httpx/_models.py::Headers.__init__",
+        "httpx/_models.py::Response.charset_encoding"
+      ],
+      "manual_impacted_nodes": [
+        "httpx/_models.py::_is_known_encoding",
+        "httpx/_models.py::_normalize_header_key",
+        "httpx/_models.py::_normalize_header_value",
+        "httpx/_models.py::_parse_content_type_charset",
+        "httpx/_models.py::Headers.__init__"
+      ],
+      "graph_tokens": 420,
+      "baseline_tokens": 9672,
+      "recall": 1.0,
+      "context_reduction": 0.956575682382134,
+      "anchor_resolution_rate": 0.8,
+      "score": 0.9669727047146401
+    },
+    {
+      "id": "httpx-336204f012",
+      "repo": "httpx",
+      "repo_url": "https://github.com/encode/httpx",
+      "base_sha": "6c7af967734bafd011164f2a1653abc87905a62b",
+      "head_sha": "336204f0121a9aefdebac5cacd81f912bafe8057",
+      "changed_files": [
+        "httpx/_transports/default.py"
+      ],
+      "retrieved_nodes": [
+        "httpx/_transports/default.py::ResponseStream.__init__",
+        "httpx/_transports/default.py::ResponseStream.__iter__",
+        "httpx/_transports/default.py::_load_httpcore_exceptions",
+        "httpx/_transports/default.py::map_httpcore_exceptions"
+      ],
+      "manual_impacted_nodes": [
+        "httpx/_transports/default.py::_load_httpcore_exceptions",
+        "httpx/_transports/default.py::map_httpcore_exceptions",
+        "httpx/_transports/default.py::ResponseStream.__init__",
+        "httpx/_transports/default.py::ResponseStream.__iter__"
+      ],
+      "graph_tokens": 263,
+      "baseline_tokens": 2380,
+      "recall": 1.0,
+      "context_reduction": 0.8894957983193277,
+      "anchor_resolution_rate": 4.0,
+      "score": 0.9668487394957982
+    },
+    {
+      "id": "httpx-5dda2aa306",
+      "repo": "httpx",
+      "repo_url": "https://github.com/encode/httpx",
+      "base_sha": "544038155382473ce87b17ef2238c96e48dee700",
+      "head_sha": "5dda2aa30692e8529555f57efa7bcd203a7d5ac1",
+      "changed_files": [
+        "httpx/_urls.py",
+        "tests/models/test_url.py"
+      ],
+      "retrieved_nodes": [
+        "httpx/_urls.py::URL.__init__",
+        "httpx/_urls.py::URL.raw_scheme",
+        "httpx/_urls.py::URL.scheme",
+        "httpx/_urls.py::URL.userinfo",
+        "httpx/_urlparse.py::urlparse",
+        "httpx/_urlparse.py::encode_host",
+        "httpx/_urlparse.py::normalize_path",
+        "httpx/_urlparse.py::normalize_port",
+        "httpx/_urlparse.py::quote",
+        "httpx/_urlparse.py::validate_path",
+        "httpx/_urls.py::URL.join",
+        "httpx/_urlparse.py::percent_encoded"
+      ],
+      "manual_impacted_nodes": [
+        "httpx/_urls.py::URL.__init__",
+        "httpx/_urls.py::URL.scheme",
+        "httpx/_urls.py::URL.raw_scheme",
+        "httpx/_urls.py::URL.userinfo",
+        "httpx/_urlparse.py::urlparse"
+      ],
+      "graph_tokens": 713,
+      "baseline_tokens": 5436,
+      "recall": 1.0,
+      "context_reduction": 0.8688373804267844,
+      "anchor_resolution_rate": 1.0,
+      "score": 0.9606512141280353
+    },
+    {
+      "id": "httpx-47f4a96ffa",
+      "repo": "httpx",
+      "repo_url": "https://github.com/encode/httpx",
+      "base_sha": "189fc4bcbe5f314128775dec66a616ac9a31ad48",
+      "head_sha": "47f4a96ffaaaa07dca1614409549b5d7a6e7af49",
+      "changed_files": [
+        "httpx/__version__.py",
+        "httpx/_decoders.py",
+        "tests/test_decoders.py"
+      ],
+      "retrieved_nodes": [
+        "httpx/_decoders.py::ContentDecoder.decode",
+        "httpx/_decoders.py::ContentDecoder.flush",
+        "httpx/_decoders.py::IdentityDecoder.decode",
+        "httpx/_decoders.py::IdentityDecoder.flush"
+      ],
+      "manual_impacted_nodes": [
+        "httpx/_decoders.py::ContentDecoder.decode",
+        "httpx/_decoders.py::ContentDecoder.flush",
+        "httpx/_decoders.py::IdentityDecoder.decode",
+        "httpx/_decoders.py::IdentityDecoder.flush"
+      ],
+      "graph_tokens": 255,
+      "baseline_tokens": 2521,
+      "recall": 1.0,
+      "context_reduction": 0.8988496628322095,
+      "anchor_resolution_rate": 0.8,
+      "score": 0.9496548988496629
+    }
+  ]
+}

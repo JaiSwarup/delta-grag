@@ -1,0 +1,22 @@
+{
+  "case_count": 20,
+  "overall": {
+    "structural_recall": 1.0,
+    "context_reduction": 0.9532700251536887,
+    "anchor_resolution_rate": 2.2866666666666666
+  },
+  "per_repo": {
+    "flask": {
+      "count": 10,
+      "recall": 1.0,
+      "context_reduction": 0.9708796157144413,
+      "anchor_resolution_rate": 2.833333333333333
+    },
+    "httpx": {
+      "count": 10,
+      "recall": 1.0,
+      "context_reduction": 0.9356604345929362,
+      "anchor_resolution_rate": 1.7399999999999998
+    }
+  }
+}
