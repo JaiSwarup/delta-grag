@@ -1,0 +1,25 @@
+name: pandas
+url: https://github.com/pandas-dev/pandas
+language: python
+size_category: large
+test_commits:
+  - sha: 733b1c60e3db5b18ab7507ffd295fbb8c56f605e
+    description: "Multiindex recurse error fix"
+  - sha: 41efd576464512e02e3d066c2703ba54750042c5
+    description: "BUG: None converted to NaN after groupby first and last"
+  - sha: 1ef196918d40a5205c74b44ef2c4a966d6c69e92
+    description: "REF: remove special-casing for internal EAs from format_array"
+  - sha: fb063f5ba14537801063e3b8d95f85205bc3bded
+    description: "Fix/26837 format array"
+  - sha: 8b611d0310d4ccd49956ff802c6620a12c231274
+    description: "BUG: round_trip parser initial/trailing whitespace"
+  - sha: 293f42203071d429bab6267c287ad0769c16309c
+    description: "Make pandas/io/sql.py work with sqlalchemy 2.0"
+  - sha: 1247f0eeee59b9ab070ab1eacb3323b0f392040f
+    description: "BUG: using dtype='int64' argument of Series causes ValueError: values cannot be losslessly cast to int64 for integer strings"
+  - sha: 18e32d258a3978aba91fff00e979d195c73b91a7
+    description: "BUG: make Series handle dtype='int64' for string array"
+  - sha: 282025bb6efcd43c876c64e628ce6125e4276b9f
+    description: "BUG: #39448 fixed dropna to return copy correctly"
+  - sha: 516bd88a02ddaff87dc01b66e0081b8b145c5f3d
+    description: "DEPR: Remove SettingWithCopyWarning"

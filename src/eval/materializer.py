@@ -36,6 +36,11 @@ def materialize_commit(
         _git(["clone", case.repo_url, str(repo_path)], cwd=repos_root)
 
     _git(["fetch", "--all", "--tags"], cwd=repo_path)
+    try:
+        _git(["fetch", "origin", case.sha], cwd=repo_path)
+    except RuntimeError:
+        pass  # It might already be fetched, or origin might not have it
+        
     head_sha = _git(["rev-parse", case.sha], cwd=repo_path)
     base_sha = _git(["rev-parse", f"{head_sha}^"], cwd=repo_path)
     diff_text = _git(["diff", base_sha, head_sha], cwd=repo_path)

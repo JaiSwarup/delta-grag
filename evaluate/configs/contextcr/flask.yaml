@@ -1,0 +1,14 @@
+name: flask
+url: https://github.com/pallets/flask
+language: python
+size_category: small
+test_commits:
+  - sha: a29f88ce6f2f9843bd6fcbbfce1390a2071965d6
+    description: "document that headers must be set before streaming"
+    changed_files: 2
+  - sha: 089cb86dd22baf9793d4d39d24e920e2bb81d03d
+    description: "Merge commit from fork"
+    changed_files: 5
+  - sha: c17f37939073d9cf08f9b7d4a89b06aaf40e6cc6
+    description: "request context tracks session access"
+    changed_files: 5

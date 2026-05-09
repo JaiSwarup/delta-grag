@@ -159,7 +159,17 @@ def build_call_graph(snapshot: RepoSnapshot | str | Path) -> CallGraph:
 
     # --- Single parse per file ---------------------------------------------------
     t1 = perf_counter()
-    extractions: list[_FileExtraction] = [_extract_file(fp) for fp in python_files]
+    import concurrent.futures
+    import os
+    
+    # Use chunksize to reduce IPC overhead for thousands of files
+    chunksize = max(1, len(python_files) // (os.cpu_count() * 4)) if os.cpu_count() else 50
+    
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        extractions: list[_FileExtraction] = list(
+            executor.map(_extract_file, python_files, chunksize=chunksize)
+        )
+        
     all_functions: list[FunctionNode] = [fn for ex in extractions for fn in ex.functions]
     extraction_ms = (perf_counter() - t1) * 1000.0
 
@@ -170,14 +180,23 @@ def build_call_graph(snapshot: RepoSnapshot | str | Path) -> CallGraph:
         call_graph.add_function(function)
     node_insertion_ms = (perf_counter() - t2) * 1000.0
 
-    # --- Edge insertion (uses already-parsed import_map from extraction) ---------
+    # --- Edge insertion ----------------------------------------------------------
     t3 = perf_counter()
-    for ex in extractions:
-        for edge in extract_call_edges(
-            ex.file_path,
-            all_functions=all_functions,
-            import_map=ex.import_map,
-        ):
+    
+    # We use ProcessPoolExecutor again, but to avoid pickling the massive `all_functions`
+    # for every single file, we pass it once to the worker processes via an initializer.
+    with concurrent.futures.ProcessPoolExecutor(
+        initializer=_init_worker, 
+        initargs=(all_functions,)
+    ) as executor:
+        edge_lists = list(executor.map(
+            _extract_edges_worker,
+            extractions,
+            chunksize=chunksize
+        ))
+
+    for edges in edge_lists:
+        for edge in edges:
             caller_id = call_graph.node_id_for_edge_endpoint(
                 edge.caller_file_path,
                 edge.caller_fqn,
@@ -185,6 +204,7 @@ def build_call_graph(snapshot: RepoSnapshot | str | Path) -> CallGraph:
             callee_id = _edge_callee_id(call_graph, edge)
             if caller_id in call_graph.graph and callee_id in call_graph.graph:
                 call_graph.add_call(edge)
+                
     edge_insertion_ms = (perf_counter() - t3) * 1000.0
 
     total_ms = (perf_counter() - t0) * 1000.0
@@ -253,6 +273,18 @@ def save_graph_to_cache(
 # Internal helpers
 # ---------------------------------------------------------------------------
 
+_worker_all_functions: list[FunctionNode] = []
+
+def _init_worker(all_functions: list[FunctionNode]) -> None:
+    global _worker_all_functions
+    _worker_all_functions = all_functions
+
+def _extract_edges_worker(ex: _FileExtraction) -> list[CallEdge]:
+    return extract_call_edges(
+        ex.file_path,
+        all_functions=_worker_all_functions,
+        import_map=ex.import_map,
+    )
 
 def _extract_file(file_path: Path) -> _FileExtraction:
     """Read and parse *file_path* once, returning functions and import map."""

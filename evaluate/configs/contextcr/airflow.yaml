@@ -1,0 +1,25 @@
+name: airflow
+url: https://github.com/apache/airflow
+language: python
+size_category: large
+test_commits:
+  - sha: d7719f182ca240e991ad94ab73b517b06b65d4db
+    description: "Operator name separate from class"
+  - sha: 045bde68d858b29bfeea83199dd7aaadb09234b5
+    description: "Improve AWS SQS Sensor (#16880)"
+  - sha: f957ac4b768f5d07a94f7f50bd7e31dd2f19107d
+    description: "AIP-84 Migrate /object/grid_data from views to FastAPI"
+  - sha: b6a8a7a38094df5df4fe242c3ae6d116c488736f
+    description: "Disable the dag file processor agent when dag_dir_list_interval is negative value"
+  - sha: 900410c6983e3314080c975890bf5575cd370351
+    description: "Log migrations info in consistent way"
+  - sha: 3d11724de2734ce0a59d6a2468a803b31d30d044
+    description: "tests command in new breeze"
+  - sha: 4d2cf25295f00b8f874a3bafd812860e1ae8b001
+    description: "Fix merging of secrets and configmaps"
+  - sha: 86863ac26f408730c91d390031ff608ccf6f5910
+    description: "Fix poll_interval in GKEJobTrigger"
+  - sha: 05b51cb2fddd8b515cd78f87c8e7df99d2bf77f8
+    description: "Remove auto unroll for dict values from taskflow"
+  - sha: 028b69185d9ea4272d681bc6fc573333cc414948
+    description: "Add reattach flag to ECSOperator"

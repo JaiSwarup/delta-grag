@@ -1,0 +1,25 @@
+name: ansible
+url: https://github.com/ansible/ansible
+language: python
+size_category: large
+test_commits:
+  - sha: 112784e38b0d5d80e145f4841b14036c23e62ef3
+    description: "add group_pattern and host_filter to foreman plugin"
+  - sha: ab6e7d7fe934c88ca19299f1715594a493f860e2
+    description: "Move `follow_redirects` parameter"
+  - sha: b26056d16c3847ad0c0190dc404b18758edea0c6
+    description: "Show ZFS mounts in ansible_mounts for Linux"
+  - sha: 47d8c32a37d0b7645b7053e16a5c7f8ac13f3db1
+    description: "Improving the RETURN and its docs on the apt_repository module"
+  - sha: fa6427839410c66ee1a2b2931ea091817ab46fcd
+    description: "Do not require SystemdStrategy subclasses for every distro"
+  - sha: 1b9e93bbbdcca17fd8c002964e1ebe74ba6124c0
+    description: "gitlab_*: remove deprecated functionalities"
+  - sha: 0138fe84e213c8ca60a4f92fb3aa69483b78cd2d
+    description: "Remove deprecated scp_if_ssh from SSH connection plugin"
+  - sha: 9759ad299f27c103c74575af272c9f1576dfae60
+    description: "Make filter type errors 'loop friendly'"
+  - sha: b4b497375a040c7ca2fe629ee6e115957f76f0af
+    description: "added number of matches to replace parameter"
+  - sha: e6d43211a9332b6cfc9c01aa1c6ab64d2b9cd7eb
+    description: "ansible-galaxy - increase page size and add retry decorator for throttling"

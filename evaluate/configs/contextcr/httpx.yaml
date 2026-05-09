@@ -1,0 +1,11 @@
+name: httpx
+url: https://github.com/encode/httpx
+language: python
+size_category: small
+test_commits:
+  - sha: b55d4635701d9dc22928ee647880c76b078ba3f2
+    description: "Upgrade Python type checker mypy"
+    changed_files: 3
+  - sha: 364697efcafe84fd4f5a73e1c2f75b498f3c3c4e
+    description: "Upgrade Python formatter ruff"
+    changed_files: 3

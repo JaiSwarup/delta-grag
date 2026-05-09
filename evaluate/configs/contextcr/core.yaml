@@ -1,0 +1,25 @@
+name: core
+url: https://github.com/home-assistant/core
+language: python
+size_category: large
+test_commits:
+  - sha: 880a5e710e105f9161e0d7082a0575cfee4976c4
+    description: "Fix color mode detection for colored template light"
+  - sha: 5e6efc94d1bdc8154df9711138bf68a1b95db4b4
+    description: "Fix IAD and vis for DS2438 1wire sensor"
+  - sha: 177a03dbf7cbb77c8bfc54648bd2235badb464a5
+    description: "Add Hue manual bridge config flow + options flow"
+  - sha: 51e5bdcdbb4b117a5897faa1884ae9adabec8793
+    description: "Change zone HVAC mode in Advantage Air"
+  - sha: 677839f7d5d882adc149c5bcc78f7b69c5fc7141
+    description: "Fix imap does not decode text body correctly"
+  - sha: 1edad02c7aacaaf68ba49167913d30f65454ed52
+    description: "Fix merge_response template not mutate original object"
+  - sha: a2532127e21e73a355ae49cbeeb1f8087b34dde3
+    description: "UniFi has changed to not report uptime in epoch form"
+  - sha: 3852ed64c217c63a4c69b002968309f40456a4c0
+    description: "Fix lifx.set_state so it works with kelvin and color_temp_kelvin and color names"
+  - sha: c325ffb45e4ffc301e9bc7ae22a54f0737e2b6f2
+    description: "Fix non threadsafe call xiaomi_aqara"
+  - sha: 4f61907ebd695d8e7258259f51a106f56b6e7863
+    description: "Fix non threadsafe call in xiaomi_aqara again"

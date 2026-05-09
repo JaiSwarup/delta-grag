@@ -80,11 +80,16 @@ def run_eval(config: EvalRunConfig | None = None) -> pd.DataFrame:
     raw_path = output_dir / "raw_runs.jsonl"
     with raw_path.open("w", encoding="utf-8") as raw_file:
         for case in iter_cases(repo_configs):
-            case_rows = _run_case(
-                case,
-                cfg=cfg,
-                system_config=system_config,
-            )
+            try:
+                case_rows = _run_case(
+                    case,
+                    cfg=cfg,
+                    system_config=system_config,
+                )
+            except Exception as e:
+                print(f"Skipping case {case.repo} @ {case.sha} due to error: {e}")
+                continue
+                
             for row in case_rows:
                 raw_file.write(json.dumps(row, sort_keys=True) + "\n")
             rows.extend(case_rows)

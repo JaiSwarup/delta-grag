@@ -1,0 +1,25 @@
+name: vllm
+url: https://github.com/vllm-project/vllm
+language: python
+size_category: large
+test_commits:
+  - sha: 388bae421a50ca118d6620b7744226ce5f3f141b
+    description: "[Model] Initial support for BLIP-2"
+  - sha: 7c7251ed4c564c0e92b6b0fc9f5bfc9cde0db359
+    description: "[Models] Add remaining model PP support"
+  - sha: 01b18984333f87d2ff566045e5378d620f3da1f4
+    description: "[core] overhaul memory profiling and fix backward compatibility"
+  - sha: 4120ce79b9297d7f0619e08ed8a2f18be1348517
+    description: "[vlm] Remove vision language config."
+  - sha: f36b6ca1a4ce1eaf4dd551a9a80d06313c92a513
+    description: "[model] Support for Llava-Next-Video model"
+  - sha: 0431d2d5ac5683e4d4d68eb6d3aaf62ef5a4b35a
+    description: "[Bugfix] Fix load config when using bools"
+  - sha: e02eca451d80ea8c18994c4fd63a31e3a88d4b14
+    description: "Call destroy_mdoel_parallel from tests/models/*.py"
+  - sha: 4eb851da054d7fc2dc62c8ce7baa2c5eb30b6e97
+    description: "[Frontend][Core] Add plumbing to support audio language models"
+  - sha: 55f034f7290caa1f4a1f7a1f102a38053931e112
+    description: "Support `BERTModel` (first `encoder-only` embedding model)"
+  - sha: d6d3d57b7c5b893803b55517871f7608c8b62ef2
+    description: "Some fixes for custom allreduce kernels"
