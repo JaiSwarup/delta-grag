@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import subprocess
 import sys
@@ -91,10 +92,16 @@ def main() -> None:
     summary_md = results_root / "summary.md"
     summary_json.write_text(json.dumps(summary, indent=2), encoding="utf-8")
     summary_md.write_text(_summary_markdown(summary), encoding="utf-8")
+    summary_csv = results_root / "summary.csv"
+    cases_csv = results_root / "real_eval_cases.csv"
+    _write_summary_csv(summary, summary_csv)
+    _write_cases_csv(all_cases, cases_csv)
 
     print(f"Wrote dataset: {dataset_path}")
     print(f"Wrote summary: {summary_json}")
     print(f"Wrote summary: {summary_md}")
+    print(f"Wrote summary: {summary_csv}")
+    print(f"Wrote cases CSV: {cases_csv}")
 
 
 def _resolve_repos(repos_arg: str):
@@ -299,6 +306,83 @@ def _build_summary(cases: list[EvalCase]) -> dict[str, Any]:
         },
         "per_repo": repo_stats,
     }
+
+
+def _write_summary_csv(summary: dict[str, Any], path: Path) -> None:
+    rows: list[dict[str, Any]] = []
+    n = int(summary.get("case_count", 0))
+    if n <= 0:
+        path.write_text(
+            "scope,repo,case_count,structural_recall,context_reduction,anchor_resolution_rate\n",
+            encoding="utf-8",
+        )
+        return
+    ov = summary["overall"]
+    rows.append(
+        {
+            "scope": "overall",
+            "repo": "",
+            "case_count": n,
+            "structural_recall": ov["structural_recall"],
+            "context_reduction": ov["context_reduction"],
+            "anchor_resolution_rate": ov["anchor_resolution_rate"],
+        }
+    )
+    for repo, st in sorted(summary.get("per_repo", {}).items()):
+        rows.append(
+            {
+                "scope": "per_repo",
+                "repo": repo,
+                "case_count": st["count"],
+                "structural_recall": st["recall"],
+                "context_reduction": st["context_reduction"],
+                "anchor_resolution_rate": st["anchor_resolution_rate"],
+            }
+        )
+    keys = list(rows[0].keys())
+    with path.open("w", encoding="utf-8", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=keys)
+        w.writeheader()
+        w.writerows(rows)
+
+
+def _write_cases_csv(cases: list[EvalCase], path: Path) -> None:
+    if not cases:
+        path.write_text(
+            "id,repo,repo_url,base_sha,head_sha,changed_files,retrieved_nodes,"
+            "manual_impacted_nodes,graph_tokens,baseline_tokens,recall,context_reduction,"
+            "anchor_resolution_rate,score\n",
+            encoding="utf-8",
+        )
+        return
+
+    def _enc(v: Any) -> str:
+        if isinstance(v, list):
+            return json.dumps(v, ensure_ascii=False)
+        return str(v)
+
+    fieldnames = [
+        "id",
+        "repo",
+        "repo_url",
+        "base_sha",
+        "head_sha",
+        "changed_files",
+        "retrieved_nodes",
+        "manual_impacted_nodes",
+        "graph_tokens",
+        "baseline_tokens",
+        "recall",
+        "context_reduction",
+        "anchor_resolution_rate",
+        "score",
+    ]
+    with path.open("w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for c in cases:
+            d = asdict(c)
+            writer.writerow({k: _enc(d[k]) for k in fieldnames})
 
 
 def _summary_markdown(summary: dict[str, Any]) -> str:

@@ -32,8 +32,9 @@ Long runs: **call-graph construction** is expensive on large repos; set `PYTHONU
 | `compare_methods.py` | Reads the dataset + `repos_cache`, recomputes D‑GRAG vs baselines, writes `baseline_comparison_*`. |
 | `repos_cache/<name>/` | Local git clones used for `git diff` and graph rebuilds. **Do not commit** these nested repos (see project `.gitignore`). |
 | `results/real_eval_cases.json` | The **dataset**: one JSON object with a `cases` array. |
-| `results/summary.json` / `summary.md` | Aggregated metrics over all cases. |
-| `results/baseline_comparison_summary.{json,md}` | Macro averages per method + context reduction vs file-context. |
+| `results/real_eval_cases.csv` | Same cases as flattened rows (list fields JSON-encoded in cells). |
+| `results/summary.json` / `summary.md` / **`summary.csv`** | Aggregated metrics over all cases (`csv`: one `overall` row + `per_repo` rows). |
+| `results/baseline_comparison_summary.{json,md}` / **`baseline_comparison_summary.csv`** | Macro averages per method + context reduction vs file-context. |
 | `results/baseline_comparison_per_case.csv` | Per-case precision/recall/F1/tokens for each method. |
 
 ---

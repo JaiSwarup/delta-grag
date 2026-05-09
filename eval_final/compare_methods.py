@@ -102,10 +102,13 @@ def main() -> None:
     csv_path = out_dir / "baseline_comparison_per_case.csv"
     summary_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
     md_path.write_text(_to_markdown(summary, case_eval_count), encoding="utf-8")
+    summary_csv_path = out_dir / "baseline_comparison_summary.csv"
+    _write_baseline_summary_csv(summary, case_eval_count, summary_csv_path)
     _write_csv(csv_path, per_case_rows)
 
     print(f"Wrote: {summary_path}")
     print(f"Wrote: {md_path}")
+    print(f"Wrote: {summary_csv_path}")
     print(f"Wrote: {csv_path}")
 
 
@@ -224,6 +227,38 @@ def _to_markdown(summary: dict[str, Any], case_count: int) -> str:
             lines.append(f"- `{method}`: {value:.4f}")
     lines.append("")
     return "\n".join(lines)
+
+
+def _write_baseline_summary_csv(
+    summary: dict[str, Any], evaluated_cases: int, path: Path
+) -> None:
+    methods = list(summary.get("methods", []))
+    red = summary.get("context_reduction_vs_file_context", {})
+    fieldnames = [
+        "evaluated_cases",
+        "method",
+        "precision",
+        "recall",
+        "f1",
+        "avg_tokens",
+        "context_reduction_vs_file_context",
+    ]
+    with path.open("w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for m in methods:
+            name = str(m["method"])
+            writer.writerow(
+                {
+                    "evaluated_cases": evaluated_cases,
+                    "method": name,
+                    "precision": m["precision"],
+                    "recall": m["recall"],
+                    "f1": m["f1"],
+                    "avg_tokens": m["avg_tokens"],
+                    "context_reduction_vs_file_context": red.get(name, ""),
+                }
+            )
 
 
 def _write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
