@@ -1,9 +1,9 @@
 {
-  "case_count": 20,
+  "case_count": 50,
   "overall": {
     "structural_recall": 1.0,
-    "context_reduction": 0.9532700251536887,
-    "anchor_resolution_rate": 2.2866666666666666
+    "context_reduction": 0.9352787773135616,
+    "anchor_resolution_rate": 1.9348320802005006
   },
   "per_repo": {
     "flask": {
@@ -15,8 +15,26 @@
     "httpx": {
       "count": 10,
       "recall": 1.0,
-      "context_reduction": 0.9356604345929362,
-      "anchor_resolution_rate": 1.7399999999999998
+      "context_reduction": 0.935660434592936,
+      "anchor_resolution_rate": 1.7400000000000002
+    },
+    "fastapi": {
+      "count": 10,
+      "recall": 1.0,
+      "context_reduction": 0.9178332911646383,
+      "anchor_resolution_rate": 1.170827067669173
+    },
+    "requests": {
+      "count": 10,
+      "recall": 1.0,
+      "context_reduction": 0.9167434645973295,
+      "anchor_resolution_rate": 2.4666666666666663
+    },
+    "click": {
+      "count": 10,
+      "recall": 1.0,
+      "context_reduction": 0.9352770804984608,
+      "anchor_resolution_rate": 1.4633333333333334
     }
   }
 }

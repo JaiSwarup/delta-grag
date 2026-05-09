@@ -42,6 +42,7 @@ def main() -> None:
     repo_graphs = _prepare_repo_graphs(cases)
     per_case_rows: list[dict[str, Any]] = []
     by_method: dict[str, dict[str, float]] = {}
+    case_eval_count = 0
 
     for case in cases:
         repo = str(case["repo"])
@@ -50,6 +51,7 @@ def main() -> None:
         expected = set(case.get("manual_impacted_nodes", []))
         if not expected:
             continue
+        case_eval_count += 1
 
         base_sha = str(case["base_sha"])
         head_sha = str(case["head_sha"])
@@ -99,7 +101,7 @@ def main() -> None:
     md_path = out_dir / "baseline_comparison_summary.md"
     csv_path = out_dir / "baseline_comparison_per_case.csv"
     summary_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
-    md_path.write_text(_to_markdown(summary), encoding="utf-8")
+    md_path.write_text(_to_markdown(summary, case_eval_count), encoding="utf-8")
     _write_csv(csv_path, per_case_rows)
 
     print(f"Wrote: {summary_path}")
@@ -201,11 +203,11 @@ def _summarize(by_method: dict[str, dict[str, float]]) -> dict[str, Any]:
     return out
 
 
-def _to_markdown(summary: dict[str, Any]) -> str:
+def _to_markdown(summary: dict[str, Any], case_count: int) -> str:
     lines = [
         "# Baseline Comparison Summary",
         "",
-        "Method-wise macro averages on the same 20 real commit cases.",
+        f"Method-wise macro averages on the same {case_count} real commit cases.",
         "",
         "| Method | Precision | Recall | F1 | Avg Tokens |",
         "|---|---:|---:|---:|---:|",

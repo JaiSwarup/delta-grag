@@ -3,36 +3,36 @@
     {
       "method": "dgrag",
       "recall": 1.0,
-      "precision": 0.9113095238095239,
-      "f1": 0.9453208556149733,
-      "avg_tokens": 344.8
+      "precision": 0.7779365079365083,
+      "f1": 0.8453525093831997,
+      "avg_tokens": 527.04
     },
     {
       "method": "diff_only",
       "recall": 0.0,
       "precision": 0.0,
       "f1": 0.0,
-      "avg_tokens": 247.95
+      "avg_tokens": 374.08
     },
     {
       "method": "file_context",
-      "recall": 0.33999999999999997,
-      "precision": 0.0741374269005848,
-      "f1": 0.12157312252964429,
-      "avg_tokens": 11369.75
+      "recall": 0.5440000000000002,
+      "precision": 0.18358479532163746,
+      "f1": 0.2554959156785245,
+      "avg_tokens": 14497.08
     },
     {
       "method": "semantic_proxy",
-      "recall": 0.10999999999999999,
-      "precision": 0.027499999999999997,
-      "f1": 0.044000000000000004,
-      "avg_tokens": 7910.85
+      "recall": 0.17799999999999996,
+      "precision": 0.03700000000000001,
+      "f1": 0.06029090909090911,
+      "avg_tokens": 15992.18
     }
   ],
   "context_reduction_vs_file_context": {
-    "dgrag": 0.9696739154334968,
-    "diff_only": 0.9781921326326436,
+    "dgrag": 0.9636450926669371,
+    "diff_only": 0.9741961829554642,
     "file_context": 0.0,
-    "semantic_proxy": 0.30421952989291756
+    "semantic_proxy": -0.1031311133000577
   }
 }

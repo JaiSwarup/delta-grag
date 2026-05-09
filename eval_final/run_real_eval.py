@@ -27,10 +27,18 @@ warnings.filterwarnings(
 )
 
 
-REPOS = [
-    {"name": "flask", "url": "https://github.com/pallets/flask"},
-    {"name": "httpx", "url": "https://github.com/encode/httpx"},
-]
+# Python repos only for this pipeline (`git diff -- *.py`).
+# requests + click: widely used, stable history, different domains than Flask/HTTP client
+# (HTTP surface API vs CLI toolkit) — good cross-project generalization for thesis.
+REPO_CATALOG = {
+    "flask": "https://github.com/pallets/flask",
+    "httpx": "https://github.com/encode/httpx",
+    "fastapi": "https://github.com/tiangolo/fastapi",
+    "requests": "https://github.com/psf/requests",
+    "click": "https://github.com/pallets/click",
+    "express": "https://github.com/expressjs/express",
+    "gin": "https://github.com/gin-gonic/gin",
+}
 
 
 @dataclass(frozen=True)
@@ -59,8 +67,10 @@ def main() -> None:
     repos_root.mkdir(parents=True, exist_ok=True)
     results_root.mkdir(parents=True, exist_ok=True)
 
+    selected_repos = _resolve_repos(args.repos)
     all_cases: list[EvalCase] = []
-    for repo_cfg in REPOS:
+    for repo_cfg in selected_repos:
+        print(f"[eval] repo: {repo_cfg['name']} (clone / graph)", flush=True)
         repo_dir = repos_root / repo_cfg["name"]
         _clone_or_update_repo(repo_cfg["url"], repo_dir)
         cases = _evaluate_repo(
@@ -87,6 +97,20 @@ def main() -> None:
     print(f"Wrote summary: {summary_md}")
 
 
+def _resolve_repos(repos_arg: str):
+    names = [part.strip().lower() for part in repos_arg.split(",") if part.strip()]
+    if not names:
+        raise ValueError("No repos provided. Pass --repos with comma-separated names.")
+    resolved = []
+    for name in names:
+        url = REPO_CATALOG.get(name)
+        if url is None:
+            supported = ", ".join(sorted(REPO_CATALOG))
+            raise ValueError(f"Unsupported repo '{name}'. Supported repos: {supported}")
+        resolved.append({"name": name, "url": url})
+    return resolved
+
+
 def _evaluate_repo(
     *,
     repo_name: str,
@@ -98,7 +122,9 @@ def _evaluate_repo(
     commits = _git_lines(repo_dir, ["log", "--first-parent", "--no-merges", f"-n{search_limit}", "--pretty=%H"])
     candidates: list[EvalCase] = []
     # Build once per repo (fast/simple mode for thesis MVP).
+    print(f"[eval] {repo_name}: building call graph (may take a while)…", flush=True)
     call_graph = build_call_graph(repo_dir)
+    print(f"[eval] {repo_name}: graph ready; scanning commits", flush=True)
 
     for head_sha in commits:
         if len(candidates) >= commits_per_repo * 2:
@@ -339,6 +365,15 @@ def _parse_args() -> argparse.Namespace:
     p.add_argument("--output-root", default="eval_final", help="Output folder inside delta-grag")
     p.add_argument("--commits-per-repo", type=int, default=10, help="Final selected commits per repo")
     p.add_argument("--search-limit", type=int, default=220, help="Max commits scanned per repo")
+    p.add_argument(
+        "--repos",
+        default="flask,httpx,fastapi,requests,click",
+        help=(
+            "Comma-separated repo names from catalog "
+            "(default: flask,httpx,fastapi,requests,click). "
+            "Non-Python repos (e.g. express, gin) clone but rarely yield *.py diffs."
+        ),
+    )
     return p.parse_args()
 
 
