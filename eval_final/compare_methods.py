@@ -60,7 +60,7 @@ def main() -> None:
 
         methods = {
             "dgrag": list(case.get("retrieved_nodes", []))[:TOP_K],
-            "diff_only": _diff_only_nodes(graph.graph, parsed)[:TOP_K],
+            "diff_only": _diff_only_nodes(graph.graph, parsed, repo_dir)[:TOP_K],
             "file_context": _file_context_nodes(graph.graph, parsed.changed_files)[:TOP_K],
             "semantic_proxy": _semantic_proxy_nodes(graph.graph, diff_text)[:TOP_K],
         }
@@ -121,8 +121,26 @@ def _prepare_repo_graphs(cases: list[dict[str, Any]]):
     return graphs
 
 
-def _diff_only_nodes(graph, parsed) -> list[str]:
-    anchors = resolve_anchors_from_parsed_diff(graph, parsed)
+def _diff_only_nodes(graph, parsed, repo_dir: Path) -> list[str]:
+    import networkx as nx
+    
+    # Create a temporary graph where file_path is relative to match git diff paths
+    temp_graph = nx.DiGraph()
+    repo_dir_str = str(repo_dir).replace("\\", "/")
+    
+    for node_id, data in graph.nodes(data=True):
+        new_data = dict(data)
+        file_path = str(data.get("file_path") or data.get("file") or "").replace("\\", "/")
+        if file_path.startswith(repo_dir_str):
+            rel_path = file_path[len(repo_dir_str):].lstrip("/")
+            new_data["file_path"] = rel_path
+            new_data["file"] = rel_path
+        temp_graph.add_node(node_id, **new_data)
+        
+    for u, v, data in graph.edges(data=True):
+        temp_graph.add_edge(u, v, **data)
+        
+    anchors = resolve_anchors_from_parsed_diff(temp_graph, parsed)
     return list(anchors.anchor_node_ids)
 
 
