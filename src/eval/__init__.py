@@ -1,52 +1,7 @@
 """
-Evaluation package for Delta-GRAG metrics and analysis.
+Offline evaluation harness for thesis-aligned Delta-GRAG metrics.
 """
 
-from .ablation import (
-    DEFAULT_HEATMAP_PATH,
-    DEFAULT_MAX_CONCURRENCY,
-    DEFAULT_OUTPUT_CSV,
-    AblationCorpus,
-    AblationCorpusCase,
-    AblationVariant,
-    load_ablation_corpus,
-    render_ablation_heatmap,
-    run_ablation_sweep,
-)
-from .metrics import (
-    EvalCase,
-    EvalResult,
-    build_metrics_table,
-    compute_bleu,
-    compute_cross_file_detection_rate,
-    compute_hallucination_rate,
-    compute_rouge_l,
-    compute_structural_recall,
-    compute_token_reduction,
-    save_metrics_table,
-)
-from .runner import EvalRunConfig, run_eval
+from src.eval.runner import EvalRunResult, run_benchmarks
 
-__all__ = [
-    "AblationCorpus",
-    "AblationCorpusCase",
-    "AblationVariant",
-    "DEFAULT_HEATMAP_PATH",
-    "DEFAULT_MAX_CONCURRENCY",
-    "DEFAULT_OUTPUT_CSV",
-    "EvalRunConfig",
-    "EvalCase",
-    "EvalResult",
-    "build_metrics_table",
-    "compute_bleu",
-    "compute_cross_file_detection_rate",
-    "compute_hallucination_rate",
-    "compute_rouge_l",
-    "compute_structural_recall",
-    "compute_token_reduction",
-    "load_ablation_corpus",
-    "render_ablation_heatmap",
-    "run_ablation_sweep",
-    "run_eval",
-    "save_metrics_table",
-]
+__all__ = ["EvalRunResult", "run_benchmarks"]

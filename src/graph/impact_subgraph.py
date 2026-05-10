@@ -288,6 +288,9 @@ def extract_impact_subgraph(
             G_prime.add_edge(u, v, **G.get_edge_data(u, v, default={}))
 
     G_prime.graph["cutoff_reasons"] = tuple(cutoff_reasons)
+    G_prime.graph["truncated"] = bool(cutoff_reasons)
+    G_prime.graph["selected_node_count"] = len(order)
+    G_prime.graph["selected_edge_count"] = G_prime.number_of_edges()
     G_prime.graph["budget"] = {
         "k_up": k_up,
         "k_down": k_down,

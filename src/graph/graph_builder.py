@@ -1,118 +1,68 @@
 """
-Graph builder CLI for static intra-repo Python call graph construction.
+Compatibility wrapper over the canonical call-graph builder.
 
-This module orchestrates:
-1) Repository extraction (Tree-sitter based)
-2) Static intra-repo call resolution
-3) NetworkX DiGraph creation
-4) Persistence to .pkl
-
-Expected companion module:
-    src/graph/call_extractor.py
-
-Requirements:
-    pip install tree-sitter tree-sitter-python networkx
+This module preserves the existing CLI/test API surface under ``src.graph`` while
+delegating graph extraction to ``src.call_graph_builder``. That keeps one
+authoritative graph-construction implementation across the codebase.
 """
 
 from __future__ import annotations
 
 import argparse
 from pathlib import Path
-from typing import Dict, List
+from typing import Any
 
 import networkx as nx
 
-from .call_extractor import (
-    ImportAlias,
-    build_symbol_lookup,
-    extract_repo,
-    resolve_callee_symbol_ids,
-)
+from src.call_graph_builder import build_call_graph as _build_call_graph_canonical
 
 
 def build_call_graph(repo_root: Path) -> nx.DiGraph:
     """
-    Build a static intra-repo call graph for Python files in `repo_root`.
+    Build a static intra-repo call graph for Python files in ``repo_root``.
 
-    Node id:
-        symbol_id from extractor (stable-ish textual id)
-
-    Node attributes:
-        - name
-        - qualified_name
-        - file
-        - start_line
-        - end_line
-        - is_nested
-        - is_lambda
-        - label
-
-    Edge direction:
-        caller -> callee
+    Returns a plain ``networkx.DiGraph`` for backward compatibility.
     """
-    repo_root = repo_root.resolve()
-    extraction = extract_repo(repo_root)
+    canonical = _build_call_graph_canonical(repo_root.resolve())
+    graph = canonical.graph.copy()
+    _add_compat_labels(graph)
+    return graph
 
-    symbols = extraction.all_symbols()
-    calls = extraction.all_calls()
-    imports = extraction.all_imports()
 
-    # Lookup tables for call resolution
-    by_qualified_name, by_simple_name, module_to_symbol_id = build_symbol_lookup(
-        symbols
-    )
+def _add_compat_labels(graph: nx.DiGraph) -> None:
+    for node_id, data in graph.nodes(data=True):
+        if not data.get("qualified_name") and data.get("fqn"):
+            data["qualified_name"] = data["fqn"]
+        if not data.get("file") and data.get("file_path"):
+            data["file"] = data["file_path"]
+        if not data.get("name"):
+            qualified_name = str(data.get("qualified_name") or "")
+            data["name"] = qualified_name.split(".")[-1] if qualified_name else str(node_id)
 
-    # file -> {simple_name: [symbol_id, ...]}
-    # Keep list shape to match resolver contract in call_extractor.
-    file_symbol_map: Dict[str, Dict[str, List[str]]] = {}
-    for s in symbols:
-        file_symbol_map.setdefault(s.file_path, {}).setdefault(s.name, []).append(
-            s.symbol_id
-        )
-
-    # file -> list[ImportAlias]
-    imports_by_file: Dict[str, List[ImportAlias]] = {}
-    for imp in imports:
-        imports_by_file.setdefault(imp.file_path, []).append(imp)
-
-    g = nx.DiGraph()
-
-    # Add nodes
-    symbol_by_id = {}
-    for s in symbols:
-        symbol_by_id[s.symbol_id] = s
-        g.add_node(
-            s.symbol_id,
-            name=s.name,
-            qualified_name=s.qualified_name,
-            file=s.file_path,
-            start_line=s.start_line,
-            end_line=s.end_line,
-            is_nested=s.is_nested,
-            is_lambda=s.is_lambda,
-            label=f"{s.qualified_name} ({s.file_path}:{s.start_line})",
-        )
-
-    # Add edges caller -> callee
-    caller_qualified_name_by_id = {s.symbol_id: s.qualified_name for s in symbols}
-    for cs in calls:
-        if cs.caller_symbol_id not in symbol_by_id:
+        if data.get("label"):
             continue
-
-        callee_ids = resolve_callee_symbol_ids(
-            call=cs,
-            file_local_defs=file_symbol_map,
-            global_simple=by_simple_name,
-            imports_by_file=imports_by_file,
-            module_member_to_symbol=module_to_symbol_id,
-            caller_qualified_name_by_id=caller_qualified_name_by_id,
+        qn = (
+            data.get("qualified_name")
+            or data.get("fqn")
+            or data.get("name")
+            or str(node_id)
         )
+        file_path = data.get("file") or data.get("file_path") or "unknown"
+        start_line = data.get("start_line")
+        if start_line is None:
+            data["label"] = f"{qn} ({file_path})"
+        else:
+            data["label"] = f"{qn} ({file_path}:{start_line})"
 
-        for callee_id in callee_ids:
-            if callee_id in symbol_by_id and callee_id != cs.caller_symbol_id:
-                g.add_edge(cs.caller_symbol_id, callee_id, call_line=cs.line)
+    for _, _, data in graph.edges(data=True):
+        _normalize_call_line(data)
 
-    return g
+
+def _normalize_call_line(attrs: dict[str, Any]) -> None:
+    if "call_line" in attrs:
+        return
+    if "call_site_line" in attrs:
+        attrs["call_line"] = attrs["call_site_line"]
 
 
 def save_graph(graph: nx.DiGraph, output_path: Path) -> None:

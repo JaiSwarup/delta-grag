@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {
+      "id": "case-1",
+      "retrieved_nodes": ["a:inner", "b:alpha", "b:beta"],
+      "expected_nodes": ["a:inner", "b:beta"],
+      "graph_tokens": 240,
+      "baseline_tokens": 520
+    },
+    {
+      "id": "case-2",
+      "retrieved_nodes": ["c:entry", "c:helper"],
+      "expected_nodes": ["c:entry", "c:helper", "c:leaf"],
+      "graph_tokens": 180,
+      "baseline_tokens": 360
+    }
+  ]
+}

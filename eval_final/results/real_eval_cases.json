@@ -1,0 +1,1665 @@
+{
+  "cases": [
+    {
+      "id": "flask-d718ecf6d3",
+      "repo": "flask",
+      "repo_url": "https://github.com/pallets/flask",
+      "base_sha": "0ce27278d234c13ce00019540ff8e9891542d1f2",
+      "head_sha": "d718ecf6d3dfc4656d262154c59672437c1ea075",
+      "changed_files": [
+        "src/flask/app.py",
+        "src/flask/sansio/app.py"
+      ],
+      "retrieved_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "manual_impacted_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "graph_tokens": 322,
+      "baseline_tokens": 19990,
+      "recall": 1.0,
+      "context_reduction": 0.9838919459729865,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.995167583791896
+    },
+    {
+      "id": "flask-fac630379d",
+      "repo": "flask",
+      "repo_url": "https://github.com/pallets/flask",
+      "base_sha": "5512a6688193758a24ef0b6825217030da9fed21",
+      "head_sha": "fac630379d31baaa1667894c2b5613304285a4bb",
+      "changed_files": [
+        "src/flask/app.py",
+        "src/flask/helpers.py"
+      ],
+      "retrieved_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "manual_impacted_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "graph_tokens": 322,
+      "baseline_tokens": 17515,
+      "recall": 1.0,
+      "context_reduction": 0.9816157579217814,
+      "anchor_resolution_rate": 1.3333333333333333,
+      "score": 0.9944847273765344
+    },
+    {
+      "id": "flask-7b0088693e",
+      "repo": "flask",
+      "repo_url": "https://github.com/pallets/flask",
+      "base_sha": "a411a2434b09d9cbaa4074232b2c247d591bb655",
+      "head_sha": "7b0088693ece1bd3a9238a6fdf56ed8df7a4d43b",
+      "changed_files": [
+        "src/flask/app.py"
+      ],
+      "retrieved_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "manual_impacted_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "graph_tokens": 322,
+      "baseline_tokens": 12209,
+      "recall": 1.0,
+      "context_reduction": 0.9736260135965271,
+      "anchor_resolution_rate": 4.0,
+      "score": 0.9920878040789581
+    },
+    {
+      "id": "flask-11c45eeba3",
+      "repo": "flask",
+      "repo_url": "https://github.com/pallets/flask",
+      "base_sha": "b78b5a210bde49e7e04b62a2a4f453ca10e0048c",
+      "head_sha": "11c45eeba3b5bcf06b84f4e864862f1019a3faa3",
+      "changed_files": [
+        "src/flask/app.py"
+      ],
+      "retrieved_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "manual_impacted_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "graph_tokens": 322,
+      "baseline_tokens": 12209,
+      "recall": 1.0,
+      "context_reduction": 0.9736260135965271,
+      "anchor_resolution_rate": 4.0,
+      "score": 0.9920878040789581
+    },
+    {
+      "id": "flask-438edcdf01",
+      "repo": "flask",
+      "repo_url": "https://github.com/pallets/flask",
+      "base_sha": "b7c1290528f907c9f41afcdfd33a2227c73e26d3",
+      "head_sha": "438edcdf01c392619449a6bdbb18f6cf72ef7bb9",
+      "changed_files": [
+        "src/flask/app.py",
+        "tests/test_helpers.py"
+      ],
+      "retrieved_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "manual_impacted_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "graph_tokens": 322,
+      "baseline_tokens": 12209,
+      "recall": 1.0,
+      "context_reduction": 0.9736260135965271,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.9920878040789581
+    },
+    {
+      "id": "flask-65271c105f",
+      "repo": "flask",
+      "repo_url": "https://github.com/pallets/flask",
+      "base_sha": "90967ccb9ab1f757c2637a68ea2e16b8da2605f4",
+      "head_sha": "65271c105f7c247ecffc9a7121815276e092bd10",
+      "changed_files": [
+        "src/flask/app.py"
+      ],
+      "retrieved_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "manual_impacted_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "graph_tokens": 322,
+      "baseline_tokens": 12209,
+      "recall": 1.0,
+      "context_reduction": 0.9736260135965271,
+      "anchor_resolution_rate": 4.0,
+      "score": 0.9920878040789581
+    },
+    {
+      "id": "flask-9532cba45d",
+      "repo": "flask",
+      "repo_url": "https://github.com/pallets/flask",
+      "base_sha": "0bc7356ce1ae11e633426902aba76d525f4523da",
+      "head_sha": "9532cba45d2339e90ebf04f178b1e4f2064e7328",
+      "changed_files": [
+        "src/flask/app.py"
+      ],
+      "retrieved_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "manual_impacted_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "graph_tokens": 322,
+      "baseline_tokens": 12209,
+      "recall": 1.0,
+      "context_reduction": 0.9736260135965271,
+      "anchor_resolution_rate": 4.0,
+      "score": 0.9920878040789581
+    },
+    {
+      "id": "flask-cc66213e57",
+      "repo": "flask",
+      "repo_url": "https://github.com/pallets/flask",
+      "base_sha": "3dc6db9d0cfddcfb971c382b014bb56ac3761d3c",
+      "head_sha": "cc66213e579d6b35d9951c21b685d0078f373c44",
+      "changed_files": [
+        "src/flask/app.py"
+      ],
+      "retrieved_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "manual_impacted_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "graph_tokens": 322,
+      "baseline_tokens": 12209,
+      "recall": 1.0,
+      "context_reduction": 0.9736260135965271,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.9920878040789581
+    },
+    {
+      "id": "flask-0d8c8ba71b",
+      "repo": "flask",
+      "repo_url": "https://github.com/pallets/flask",
+      "base_sha": "9c3deeee963e62dfb60c9343fad4ec2ec752fdba",
+      "head_sha": "0d8c8ba71bc6362e6ea9af08146dc97e1a0a8abc",
+      "changed_files": [
+        "src/flask/app.py"
+      ],
+      "retrieved_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "manual_impacted_nodes": [
+        "src/flask/app.py::_make_timedelta",
+        "src/flask/app.py::remove_ctx",
+        "src/flask/app.py::remove_ctx.wrapper",
+        "src/flask/app.py::add_ctx",
+        "src/flask/app.py::Flask.__init_subclass__"
+      ],
+      "graph_tokens": 322,
+      "baseline_tokens": 12209,
+      "recall": 1.0,
+      "context_reduction": 0.9736260135965271,
+      "anchor_resolution_rate": 4.0,
+      "score": 0.9920878040789581
+    },
+    {
+      "id": "flask-a411a2434b",
+      "repo": "flask",
+      "repo_url": "https://github.com/pallets/flask",
+      "base_sha": "daca74d93a0edc458e618136de7d14803f06bc28",
+      "head_sha": "a411a2434b09d9cbaa4074232b2c247d591bb655",
+      "changed_files": [
+        "src/flask/ctx.py"
+      ],
+      "retrieved_nodes": [
+        "src/flask/ctx.py::_AppCtxGlobals.__delattr__",
+        "src/flask/ctx.py::_AppCtxGlobals.__getattr__",
+        "src/flask/ctx.py::_AppCtxGlobals.__setattr__",
+        "src/flask/ctx.py::_AppCtxGlobals.get"
+      ],
+      "manual_impacted_nodes": [
+        "src/flask/ctx.py::_AppCtxGlobals.__getattr__",
+        "src/flask/ctx.py::_AppCtxGlobals.__setattr__",
+        "src/flask/ctx.py::_AppCtxGlobals.__delattr__",
+        "src/flask/ctx.py::_AppCtxGlobals.get"
+      ],
+      "graph_tokens": 271,
+      "baseline_tokens": 3759,
+      "recall": 1.0,
+      "context_reduction": 0.9279063580739558,
+      "anchor_resolution_rate": 1.0,
+      "score": 0.9783719074221867
+    },
+    {
+      "id": "httpx-4189b7f051",
+      "repo": "httpx",
+      "repo_url": "https://github.com/encode/httpx",
+      "base_sha": "e70d0b08c929e5140e38aa92a419de0c6d494148",
+      "head_sha": "4189b7f051c6c51ce74c3bee1a5f269f9c50c6b2",
+      "changed_files": [
+        "httpx/_client.py",
+        "httpx/_models.py"
+      ],
+      "retrieved_nodes": [
+        "httpx/_client.py::BoundSyncStream.__init__",
+        "httpx/_client.py::_is_https_redirect",
+        "httpx/_client.py::_port_or_default",
+        "httpx/_client.py::_same_origin",
+        "httpx/_client.py::BaseClient._redirect_headers",
+        "httpx/_client.py::BaseClient._build_redirect_request"
+      ],
+      "manual_impacted_nodes": [
+        "httpx/_client.py::_is_https_redirect",
+        "httpx/_client.py::_port_or_default",
+        "httpx/_client.py::_same_origin",
+        "httpx/_client.py::BoundSyncStream.__init__",
+        "httpx/_client.py::BaseClient._redirect_headers"
+      ],
+      "graph_tokens": 363,
+      "baseline_tokens": 20709,
+      "recall": 1.0,
+      "context_reduction": 0.9824713892510503,
+      "anchor_resolution_rate": 1.0,
+      "score": 0.994741416775315
+    },
+    {
+      "id": "httpx-15e21e9ea3",
+      "repo": "httpx",
+      "repo_url": "https://github.com/encode/httpx",
+      "base_sha": "80960fa31918d7663c3f4c3ad61661cf0e80628f",
+      "head_sha": "15e21e9ea3cad4f06e22a7e704aabefdf43d2e29",
+      "changed_files": [
+        "httpx/_client.py"
+      ],
+      "retrieved_nodes": [
+        "httpx/_client.py::BoundSyncStream.__init__",
+        "httpx/_client.py::_is_https_redirect",
+        "httpx/_client.py::_port_or_default",
+        "httpx/_client.py::_same_origin",
+        "httpx/_client.py::BaseClient._redirect_headers",
+        "httpx/_client.py::BaseClient._build_redirect_request"
+      ],
+      "manual_impacted_nodes": [
+        "httpx/_client.py::_is_https_redirect",
+        "httpx/_client.py::_port_or_default",
+        "httpx/_client.py::_same_origin",
+        "httpx/_client.py::BoundSyncStream.__init__",
+        "httpx/_client.py::BaseClient._redirect_headers"
+      ],
+      "graph_tokens": 363,
+      "baseline_tokens": 11737,
+      "recall": 1.0,
+      "context_reduction": 0.9690721649484536,
+      "anchor_resolution_rate": 4.0,
+      "score": 0.990721649484536
+    },
+    {
+      "id": "httpx-364697efca",
+      "repo": "httpx",
+      "repo_url": "https://github.com/encode/httpx",
+      "base_sha": "89102021fcb44f6c3fab6304e5f951692723c908",
+      "head_sha": "364697efcafe39290358745da8be451a40a3eab2",
+      "changed_files": [
+        "httpx/_exceptions.py",
+        "httpx/_urls.py",
+        "tests/test_content.py"
+      ],
+      "retrieved_nodes": [
+        "httpx/_exceptions.py::HTTPError.__init__",
+        "httpx/_exceptions.py::HTTPError.request",
+        "httpx/_exceptions.py::HTTPStatusError.__init__",
+        "httpx/_exceptions.py::RequestError.__init__"
+      ],
+      "manual_impacted_nodes": [
+        "httpx/_exceptions.py::HTTPError.__init__",
+        "httpx/_exceptions.py::HTTPError.request",
+        "httpx/_exceptions.py::RequestError.__init__",
+        "httpx/_exceptions.py::HTTPStatusError.__init__"
+      ],
+      "graph_tokens": 255,
+      "baseline_tokens": 7117,
+      "recall": 1.0,
+      "context_reduction": 0.9641702964732332,
+      "anchor_resolution_rate": 1.0,
+      "score": 0.9892510889419699
+    },
+    {
+      "id": "httpx-6622553979",
+      "repo": "httpx",
+      "repo_url": "https://github.com/encode/httpx",
+      "base_sha": "12be5c44caa7a34bfe19f82eace5150ddeba2612",
+      "head_sha": "66225539796d819b5114ead2fd5e4d61865ab708",
+      "changed_files": [
+        "httpx/_models.py"
+      ],
+      "retrieved_nodes": [
+        "httpx/_models.py::_is_known_encoding",
+        "httpx/_models.py::_normalize_header_key",
+        "httpx/_models.py::_normalize_header_value",
+        "httpx/_models.py::_parse_content_type_charset",
+        "httpx/_models.py::Response.encoding",
+        "httpx/_models.py::Headers.__init__",
+        "httpx/_models.py::Response.charset_encoding"
+      ],
+      "manual_impacted_nodes": [
+        "httpx/_models.py::_is_known_encoding",
+        "httpx/_models.py::_normalize_header_key",
+        "httpx/_models.py::_normalize_header_value",
+        "httpx/_models.py::_parse_content_type_charset",
+        "httpx/_models.py::Headers.__init__"
+      ],
+      "graph_tokens": 420,
+      "baseline_tokens": 8972,
+      "recall": 1.0,
+      "context_reduction": 0.9531876950512707,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.9859563085153812
+    },
+    {
+      "id": "httpx-ae1b9f6623",
+      "repo": "httpx",
+      "repo_url": "https://github.com/encode/httpx",
+      "base_sha": "ca097c96f97d8d2a5da09b8ca736c7e78a2467f6",
+      "head_sha": "ae1b9f66238f75ced3ced5e4485408435de10768",
+      "changed_files": [
+        "httpx/__init__.py",
+        "httpx/_auth.py"
+      ],
+      "retrieved_nodes": [
+        "httpx/_auth.py::Auth.async_auth_flow",
+        "httpx/_auth.py::Auth.auth_flow",
+        "httpx/_auth.py::Auth.sync_auth_flow",
+        "httpx/_auth.py::FunctionAuth.__init__"
+      ],
+      "manual_impacted_nodes": [
+        "httpx/_auth.py::Auth.auth_flow",
+        "httpx/_auth.py::Auth.sync_auth_flow",
+        "httpx/_auth.py::Auth.async_auth_flow",
+        "httpx/_auth.py::FunctionAuth.__init__"
+      ],
+      "graph_tokens": 255,
+      "baseline_tokens": 2902,
+      "recall": 1.0,
+      "context_reduction": 0.9121295658166781,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.9736388697450035
+    },
+    {
+      "id": "httpx-83a85189c7",
+      "repo": "httpx",
+      "repo_url": "https://github.com/encode/httpx",
+      "base_sha": "66225539796d819b5114ead2fd5e4d61865ab708",
+      "head_sha": "83a85189c79708b732d04e7b906e388fb0fbde94",
+      "changed_files": [
+        "httpx/_models.py",
+        "httpx/_utils.py"
+      ],
+      "retrieved_nodes": [
+        "httpx/_models.py::_is_known_encoding",
+        "httpx/_models.py::_normalize_header_key",
+        "httpx/_models.py::_normalize_header_value",
+        "httpx/_models.py::_parse_content_type_charset",
+        "httpx/_models.py::Response.encoding",
+        "httpx/_models.py::Headers.__init__",
+        "httpx/_models.py::Response.charset_encoding"
+      ],
+      "manual_impacted_nodes": [
+        "httpx/_models.py::_is_known_encoding",
+        "httpx/_models.py::_normalize_header_key",
+        "httpx/_models.py::_normalize_header_value",
+        "httpx/_models.py::_parse_content_type_charset",
+        "httpx/_models.py::Headers.__init__"
+      ],
+      "graph_tokens": 420,
+      "baseline_tokens": 10999,
+      "recall": 1.0,
+      "context_reduction": 0.9618147104282208,
+      "anchor_resolution_rate": 0.8,
+      "score": 0.9685444131284662
+    },
+    {
+      "id": "httpx-a33c87852b",
+      "repo": "httpx",
+      "repo_url": "https://github.com/encode/httpx",
+      "base_sha": "ce7e14da27abba6574be9b3ea7cd5990556a9343",
+      "head_sha": "a33c87852b8a0dddc65e5f739af1e0a6fca4b91f",
+      "changed_files": [
+        "httpx/_models.py",
+        "httpx/_types.py"
+      ],
+      "retrieved_nodes": [
+        "httpx/_models.py::_is_known_encoding",
+        "httpx/_models.py::_normalize_header_key",
+        "httpx/_models.py::_normalize_header_value",
+        "httpx/_models.py::_parse_content_type_charset",
+        "httpx/_models.py::Response.encoding",
+        "httpx/_models.py::Headers.__init__",
+        "httpx/_models.py::Response.charset_encoding"
+      ],
+      "manual_impacted_nodes": [
+        "httpx/_models.py::_is_known_encoding",
+        "httpx/_models.py::_normalize_header_key",
+        "httpx/_models.py::_normalize_header_value",
+        "httpx/_models.py::_parse_content_type_charset",
+        "httpx/_models.py::Headers.__init__"
+      ],
+      "graph_tokens": 420,
+      "baseline_tokens": 9672,
+      "recall": 1.0,
+      "context_reduction": 0.956575682382134,
+      "anchor_resolution_rate": 0.8,
+      "score": 0.9669727047146401
+    },
+    {
+      "id": "httpx-336204f012",
+      "repo": "httpx",
+      "repo_url": "https://github.com/encode/httpx",
+      "base_sha": "6c7af967734bafd011164f2a1653abc87905a62b",
+      "head_sha": "336204f0121a9aefdebac5cacd81f912bafe8057",
+      "changed_files": [
+        "httpx/_transports/default.py"
+      ],
+      "retrieved_nodes": [
+        "httpx/_transports/default.py::ResponseStream.__init__",
+        "httpx/_transports/default.py::ResponseStream.__iter__",
+        "httpx/_transports/default.py::_load_httpcore_exceptions",
+        "httpx/_transports/default.py::map_httpcore_exceptions"
+      ],
+      "manual_impacted_nodes": [
+        "httpx/_transports/default.py::_load_httpcore_exceptions",
+        "httpx/_transports/default.py::map_httpcore_exceptions",
+        "httpx/_transports/default.py::ResponseStream.__init__",
+        "httpx/_transports/default.py::ResponseStream.__iter__"
+      ],
+      "graph_tokens": 263,
+      "baseline_tokens": 2380,
+      "recall": 1.0,
+      "context_reduction": 0.8894957983193277,
+      "anchor_resolution_rate": 4.0,
+      "score": 0.9668487394957982
+    },
+    {
+      "id": "httpx-5dda2aa306",
+      "repo": "httpx",
+      "repo_url": "https://github.com/encode/httpx",
+      "base_sha": "544038155382473ce87b17ef2238c96e48dee700",
+      "head_sha": "5dda2aa30692e8529555f57efa7bcd203a7d5ac1",
+      "changed_files": [
+        "httpx/_urls.py",
+        "tests/models/test_url.py"
+      ],
+      "retrieved_nodes": [
+        "httpx/_urls.py::URL.__init__",
+        "httpx/_urls.py::URL.raw_scheme",
+        "httpx/_urls.py::URL.scheme",
+        "httpx/_urls.py::URL.userinfo",
+        "httpx/_urlparse.py::urlparse",
+        "httpx/_urlparse.py::encode_host",
+        "httpx/_urlparse.py::normalize_path",
+        "httpx/_urlparse.py::normalize_port",
+        "httpx/_urlparse.py::quote",
+        "httpx/_urlparse.py::validate_path",
+        "httpx/_urls.py::URL.join",
+        "httpx/_urlparse.py::percent_encoded"
+      ],
+      "manual_impacted_nodes": [
+        "httpx/_urls.py::URL.__init__",
+        "httpx/_urls.py::URL.scheme",
+        "httpx/_urls.py::URL.raw_scheme",
+        "httpx/_urls.py::URL.userinfo",
+        "httpx/_urlparse.py::urlparse"
+      ],
+      "graph_tokens": 713,
+      "baseline_tokens": 5436,
+      "recall": 1.0,
+      "context_reduction": 0.8688373804267844,
+      "anchor_resolution_rate": 1.0,
+      "score": 0.9606512141280353
+    },
+    {
+      "id": "httpx-47f4a96ffa",
+      "repo": "httpx",
+      "repo_url": "https://github.com/encode/httpx",
+      "base_sha": "189fc4bcbe5f314128775dec66a616ac9a31ad48",
+      "head_sha": "47f4a96ffaaaa07dca1614409549b5d7a6e7af49",
+      "changed_files": [
+        "httpx/__version__.py",
+        "httpx/_decoders.py",
+        "tests/test_decoders.py"
+      ],
+      "retrieved_nodes": [
+        "httpx/_decoders.py::ContentDecoder.decode",
+        "httpx/_decoders.py::ContentDecoder.flush",
+        "httpx/_decoders.py::IdentityDecoder.decode",
+        "httpx/_decoders.py::IdentityDecoder.flush"
+      ],
+      "manual_impacted_nodes": [
+        "httpx/_decoders.py::ContentDecoder.decode",
+        "httpx/_decoders.py::ContentDecoder.flush",
+        "httpx/_decoders.py::IdentityDecoder.decode",
+        "httpx/_decoders.py::IdentityDecoder.flush"
+      ],
+      "graph_tokens": 255,
+      "baseline_tokens": 2521,
+      "recall": 1.0,
+      "context_reduction": 0.8988496628322095,
+      "anchor_resolution_rate": 0.8,
+      "score": 0.9496548988496629
+    },
+    {
+      "id": "fastapi-9960db5abf",
+      "repo": "fastapi",
+      "repo_url": "https://github.com/tiangolo/fastapi",
+      "base_sha": "b707bb8a70dd4ef6eeffd3255a8c76a1504bd253",
+      "head_sha": "9960db5abf10bb2e27483ce4b8913e33457a7d40",
+      "changed_files": [
+        "scripts/doc_parsing_utils.py",
+        "scripts/translate.py"
+      ],
+      "retrieved_nodes": [
+        "scripts/doc_parsing_utils.py::extract_code_includes",
+        "scripts/doc_parsing_utils.py::extract_header_permalinks",
+        "scripts/doc_parsing_utils.py::replace_code_includes_with_placeholders",
+        "scripts/doc_parsing_utils.py::replace_placeholders_with_code_includes",
+        "scripts/doc_parsing_utils.py::check_translation",
+        "scripts/translate.py::translate_page",
+        "scripts/translation_fixer.py::process_one_page"
+      ],
+      "manual_impacted_nodes": [
+        "scripts/doc_parsing_utils.py::extract_code_includes",
+        "scripts/doc_parsing_utils.py::replace_code_includes_with_placeholders",
+        "scripts/doc_parsing_utils.py::replace_placeholders_with_code_includes",
+        "scripts/doc_parsing_utils.py::extract_header_permalinks",
+        "scripts/doc_parsing_utils.py::check_translation"
+      ],
+      "graph_tokens": 408,
+      "baseline_tokens": 8878,
+      "recall": 1.0,
+      "context_reduction": 0.9540437035368327,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.9862131110610498
+    },
+    {
+      "id": "fastapi-ae4e45c5cc",
+      "repo": "fastapi",
+      "repo_url": "https://github.com/tiangolo/fastapi",
+      "base_sha": "9653034b8d459607a4b7f761e6c23a6f287fa5fa",
+      "head_sha": "ae4e45c5cc20a1e1503fbcab2369821d188feb09",
+      "changed_files": [
+        "fastapi/applications.py"
+      ],
+      "retrieved_nodes": [
+        "fastapi/applications.py::FastAPI.__init__",
+        "fastapi/applications.py::FastAPI.build_middleware_stack",
+        "fastapi/applications.py::FastAPI.openapi",
+        "fastapi/applications.py::FastAPI.setup",
+        "fastapi/applications.py::FastAPI.setup.openapi",
+        "fastapi/openapi/utils.py::get_openapi",
+        "fastapi/_compat/v2.py::get_definitions",
+        "fastapi/_compat/v2.py::get_flat_models_from_fields",
+        "fastapi/_compat/v2.py::get_model_name_map",
+        "fastapi/encoders.py::jsonable_encoder",
+        "fastapi/openapi/utils.py::get_fields_from_routes",
+        "fastapi/openapi/utils.py::get_openapi_path",
+        "fastapi/_compat/v2.py::_has_computed_fields",
+        "fastapi/_compat/v2.py::get_flat_models_from_field",
+        "fastapi/_compat/v2.py::normalize_name",
+        "fastapi/_compat/shared.py::is_pydantic_v1_model_instance",
+        "fastapi/_compat/v2.py::asdict",
+        "fastapi/dependencies/utils.py::get_flat_params",
+        "fastapi/_compat/shared.py::lenient_issubclass",
+        "fastapi/_compat/v2.py::get_schema_from_model_field"
+      ],
+      "manual_impacted_nodes": [
+        "fastapi/applications.py::FastAPI.__init__",
+        "fastapi/applications.py::FastAPI.build_middleware_stack",
+        "fastapi/applications.py::FastAPI.openapi",
+        "fastapi/applications.py::FastAPI.setup",
+        "fastapi/applications.py::FastAPI.setup.openapi"
+      ],
+      "graph_tokens": 1646,
+      "baseline_tokens": 30445,
+      "recall": 1.0,
+      "context_reduction": 0.9459352931515849,
+      "anchor_resolution_rate": 1.0,
+      "score": 0.9837805879454754
+    },
+    {
+      "id": "fastapi-70580da818",
+      "repo": "fastapi",
+      "repo_url": "https://github.com/tiangolo/fastapi",
+      "base_sha": "6ee87478d821171139264cd9cd17cbd2232934ce",
+      "head_sha": "70580da818722cce68b7a88928d67bd0f64f42c5",
+      "changed_files": [
+        "docs_src/vibe/tutorial001_py310.py",
+        "fastapi/applications.py",
+        "tests/test_vibe.py"
+      ],
+      "retrieved_nodes": [
+        "fastapi/applications.py::FastAPI.__init__",
+        "fastapi/applications.py::FastAPI.build_middleware_stack",
+        "fastapi/applications.py::FastAPI.openapi",
+        "fastapi/applications.py::FastAPI.setup",
+        "fastapi/applications.py::FastAPI.setup.openapi",
+        "fastapi/openapi/utils.py::get_openapi",
+        "fastapi/_compat/v2.py::get_definitions",
+        "fastapi/_compat/v2.py::get_flat_models_from_fields",
+        "fastapi/_compat/v2.py::get_model_name_map",
+        "fastapi/encoders.py::jsonable_encoder",
+        "fastapi/openapi/utils.py::get_fields_from_routes",
+        "fastapi/openapi/utils.py::get_openapi_path",
+        "fastapi/_compat/v2.py::_has_computed_fields",
+        "fastapi/_compat/v2.py::get_flat_models_from_field",
+        "fastapi/_compat/v2.py::normalize_name",
+        "fastapi/_compat/shared.py::is_pydantic_v1_model_instance",
+        "fastapi/_compat/v2.py::asdict",
+        "fastapi/dependencies/utils.py::get_flat_params",
+        "fastapi/_compat/shared.py::lenient_issubclass",
+        "fastapi/_compat/v2.py::get_schema_from_model_field"
+      ],
+      "manual_impacted_nodes": [
+        "fastapi/applications.py::FastAPI.__init__",
+        "fastapi/applications.py::FastAPI.build_middleware_stack",
+        "fastapi/applications.py::FastAPI.openapi",
+        "fastapi/applications.py::FastAPI.setup",
+        "fastapi/applications.py::FastAPI.setup.openapi"
+      ],
+      "graph_tokens": 1646,
+      "baseline_tokens": 30445,
+      "recall": 1.0,
+      "context_reduction": 0.9459352931515849,
+      "anchor_resolution_rate": 1.0,
+      "score": 0.9837805879454754
+    },
+    {
+      "id": "fastapi-b363a1d002",
+      "repo": "fastapi",
+      "repo_url": "https://github.com/tiangolo/fastapi",
+      "base_sha": "a3ceb9ca7415d8874233edac857e85e47d2a6680",
+      "head_sha": "b363a1d0023b25fba9231c17ae371c9d44c65c68",
+      "changed_files": [
+        "scripts/docs.py"
+      ],
+      "retrieved_nodes": [
+        "scripts/docs.py::VisibleTextExtractor.__init__",
+        "scripts/docs.py::VisibleTextExtractor.extract_visible_text",
+        "scripts/docs.py::VisibleTextExtractor.handle_data",
+        "scripts/docs.py::strip_markdown_links",
+        "scripts/docs.py::add_permalinks_page",
+        "scripts/docs.py::add_permalinks",
+        "scripts/docs.py::add_permalinks_pages"
+      ],
+      "manual_impacted_nodes": [
+        "scripts/docs.py::strip_markdown_links",
+        "scripts/docs.py::VisibleTextExtractor.__init__",
+        "scripts/docs.py::VisibleTextExtractor.handle_data",
+        "scripts/docs.py::VisibleTextExtractor.extract_visible_text",
+        "scripts/docs.py::add_permalinks_page"
+      ],
+      "graph_tokens": 420,
+      "baseline_tokens": 5713,
+      "recall": 1.0,
+      "context_reduction": 0.9264834587782251,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.9779450376334674
+    },
+    {
+      "id": "fastapi-0c0be9429f",
+      "repo": "fastapi",
+      "repo_url": "https://github.com/tiangolo/fastapi",
+      "base_sha": "b27fe99c2f6aaf7d14a3e21a9fa272411271fa3c",
+      "head_sha": "0c0be9429f756acc7d9c0dc66b4456b29900e5d5",
+      "changed_files": [
+        "scripts/docs.py"
+      ],
+      "retrieved_nodes": [
+        "scripts/docs.py::VisibleTextExtractor.__init__",
+        "scripts/docs.py::VisibleTextExtractor.extract_visible_text",
+        "scripts/docs.py::VisibleTextExtractor.handle_data",
+        "scripts/docs.py::strip_markdown_links",
+        "scripts/docs.py::add_permalinks_page",
+        "scripts/docs.py::add_permalinks",
+        "scripts/docs.py::add_permalinks_pages"
+      ],
+      "manual_impacted_nodes": [
+        "scripts/docs.py::strip_markdown_links",
+        "scripts/docs.py::VisibleTextExtractor.__init__",
+        "scripts/docs.py::VisibleTextExtractor.handle_data",
+        "scripts/docs.py::VisibleTextExtractor.extract_visible_text",
+        "scripts/docs.py::add_permalinks_page"
+      ],
+      "graph_tokens": 420,
+      "baseline_tokens": 5713,
+      "recall": 1.0,
+      "context_reduction": 0.9264834587782251,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.9779450376334674
+    },
+    {
+      "id": "fastapi-fa3588c38c",
+      "repo": "fastapi",
+      "repo_url": "https://github.com/tiangolo/fastapi",
+      "base_sha": "25a3697cedc6e7dfb84e93c8ff965801486f00f4",
+      "head_sha": "fa3588c38c7473aca7536b12d686102de4b0f407",
+      "changed_files": [
+        "fastapi/security/oauth2.py"
+      ],
+      "retrieved_nodes": [
+        "fastapi/security/oauth2.py::OAuth2.__init__",
+        "fastapi/security/oauth2.py::OAuth2.make_not_authenticated_error",
+        "fastapi/security/oauth2.py::OAuth2PasswordRequestForm.__init__",
+        "fastapi/security/oauth2.py::OAuth2PasswordRequestFormStrict.__init__",
+        "fastapi/security/oauth2.py::OAuth2.__call__"
+      ],
+      "manual_impacted_nodes": [
+        "fastapi/security/oauth2.py::OAuth2PasswordRequestForm.__init__",
+        "fastapi/security/oauth2.py::OAuth2PasswordRequestFormStrict.__init__",
+        "fastapi/security/oauth2.py::OAuth2.__init__",
+        "fastapi/security/oauth2.py::OAuth2.make_not_authenticated_error",
+        "fastapi/security/oauth2.py::OAuth2.__call__"
+      ],
+      "graph_tokens": 334,
+      "baseline_tokens": 4176,
+      "recall": 1.0,
+      "context_reduction": 0.9200191570881227,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.9760057471264367
+    },
+    {
+      "id": "fastapi-31bbb38074",
+      "repo": "fastapi",
+      "repo_url": "https://github.com/tiangolo/fastapi",
+      "base_sha": "eb6851dd4bdb90dd94ed0a804972f0ef72d3dc39",
+      "head_sha": "31bbb380748ccead62fc0f42dbf4273f11dadccf",
+      "changed_files": [
+        "fastapi/security/http.py",
+        "fastapi/security/oauth2.py",
+        "fastapi/security/open_id_connect_url.py",
+        "tests/test_pydanticv2_dataclasses_uuid_stringified_annotations.py"
+      ],
+      "retrieved_nodes": [
+        "fastapi/security/http.py::HTTPBase.__call__",
+        "fastapi/security/http.py::HTTPBase.__init__",
+        "fastapi/security/http.py::HTTPBase.make_authenticate_headers",
+        "fastapi/security/http.py::HTTPBase.make_not_authenticated_error",
+        "fastapi/security/utils.py::get_authorization_scheme_param"
+      ],
+      "manual_impacted_nodes": [
+        "fastapi/security/http.py::HTTPBase.__init__",
+        "fastapi/security/http.py::HTTPBase.make_authenticate_headers",
+        "fastapi/security/http.py::HTTPBase.make_not_authenticated_error",
+        "fastapi/security/http.py::HTTPBase.__call__",
+        "fastapi/security/utils.py::get_authorization_scheme_param"
+      ],
+      "graph_tokens": 330,
+      "baseline_tokens": 7016,
+      "recall": 1.0,
+      "context_reduction": 0.9529646522234891,
+      "anchor_resolution_rate": 0.6666666666666666,
+      "score": 0.9525560623337134
+    },
+    {
+      "id": "fastapi-0227991a01",
+      "repo": "fastapi",
+      "repo_url": "https://github.com/tiangolo/fastapi",
+      "base_sha": "cbd64b09a32681d3b0ea097608bc62eb0d1587e0",
+      "head_sha": "0227991a01e61bf5cdd93cc00e9e243f52b47a4a",
+      "changed_files": [
+        "scripts/people.py"
+      ],
+      "retrieved_nodes": [
+        "scripts/people.py::RateLimiter.__enter__",
+        "scripts/people.py::RateLimiter.__exit__",
+        "scripts/people.py::RateLimiter.__init__",
+        "scripts/people.py::RateLimiter.update_request_info"
+      ],
+      "manual_impacted_nodes": [
+        "scripts/people.py::RateLimiter.__init__",
+        "scripts/people.py::RateLimiter.__enter__",
+        "scripts/people.py::RateLimiter.__exit__",
+        "scripts/people.py::RateLimiter.update_request_info"
+      ],
+      "graph_tokens": 255,
+      "baseline_tokens": 2716,
+      "recall": 1.0,
+      "context_reduction": 0.9061119293078056,
+      "anchor_resolution_rate": 0.4,
+      "score": 0.9118335787923417
+    },
+    {
+      "id": "fastapi-98b269b51e",
+      "repo": "fastapi",
+      "repo_url": "https://github.com/tiangolo/fastapi",
+      "base_sha": "7e7c4d09ac3426ddd180247e8f582b84e7438852",
+      "head_sha": "98b269b51ef8ff9fe8b66d7bcd31f2d9770fc18f",
+      "changed_files": [
+        "fastapi/_compat/__init__.py",
+        "fastapi/_compat/v2.py",
+        "fastapi/applications.py",
+        "fastapi/cli.py",
+        "fastapi/datastructures.py",
+        "fastapi/dependencies/utils.py",
+        "fastapi/encoders.py",
+        "fastapi/openapi/models.py",
+        "fastapi/openapi/utils.py",
+        "fastapi/param_functions.py",
+        "fastapi/params.py",
+        "fastapi/routing.py",
+        "fastapi/security/api_key.py",
+        "fastapi/security/http.py"
+      ],
+      "retrieved_nodes": [
+        "fastapi/_compat/v2.py::GenerateJsonSchema.bytes_schema",
+        "fastapi/_compat/v2.py::ModelField.alias",
+        "fastapi/_compat/v2.py::asdict",
+        "fastapi/_compat/v2.py::evaluate_forwardref",
+        "fastapi/_compat/v2.py::ModelField.__post_init__",
+        "fastapi/encoders.py::jsonable_encoder",
+        "docs_src/body_updates/tutorial001_py310.py::update_item",
+        "docs_src/body_updates/tutorial002_py310.py::update_item",
+        "docs_src/encoder/tutorial001_py310.py::update_item",
+        "docs_src/response_directly/tutorial001_py310.py::update_item",
+        "fastapi/openapi/docs.py::get_swagger_ui_html",
+        "fastapi/openapi/utils.py::_get_openapi_operation_parameters",
+        "fastapi/openapi/utils.py::get_openapi",
+        "fastapi/openapi/utils.py::get_openapi_operation_request_body",
+        "fastapi/openapi/utils.py::get_openapi_security_definitions",
+        "fastapi/routing.py::get_request_handler.app._serialize_data",
+        "fastapi/routing.py::get_request_handler.app._serialize_sse_item",
+        "fastapi/routing.py::serialize_response",
+        "tests/test_jsonable_encoder.py::test_custom_encoders",
+        "tests/test_jsonable_encoder.py::test_custom_enum_encoders"
+      ],
+      "manual_impacted_nodes": [
+        "fastapi/_compat/v2.py::evaluate_forwardref",
+        "fastapi/_compat/v2.py::GenerateJsonSchema.bytes_schema",
+        "fastapi/_compat/v2.py::asdict",
+        "fastapi/_compat/v2.py::ModelField.alias",
+        "fastapi/_compat/v2.py::ModelField.__post_init__"
+      ],
+      "graph_tokens": 2666,
+      "baseline_tokens": 104279,
+      "recall": 1.0,
+      "context_reduction": 0.9744339704063139,
+      "anchor_resolution_rate": 0.07017543859649122,
+      "score": 0.8993477349815433
+    },
+    {
+      "id": "fastapi-38039e12a8",
+      "repo": "fastapi",
+      "repo_url": "https://github.com/tiangolo/fastapi",
+      "base_sha": "4fa826ce0a3b16884a04f51e5aac95d01790b599",
+      "head_sha": "38039e12a86e67f2001b9b7d96c219691d6cb4af",
+      "changed_files": [
+        "scripts/translate.py"
+      ],
+      "retrieved_nodes": [
+        "scripts/translate.py::generate_en_path",
+        "scripts/translate.py::generate_lang_path",
+        "scripts/translate.py::get_langs",
+        "scripts/translate.py::get_prompt",
+        "scripts/translate.py::list_removable",
+        "scripts/translate.py::list_all_removable",
+        "scripts/translate.py::remove_removable",
+        "fastapi/param_functions.py::Path",
+        "scripts/translate.py::list_missing",
+        "scripts/translate.py::list_outdated",
+        "scripts/translate.py::translate_lang",
+        "scripts/translate.py::translate_page",
+        "scripts/translate.py::add_missing",
+        "scripts/translate.py::update_outdated",
+        "scripts/translate.py::get_llm_translatable",
+        "scripts/translate.py::list_llm_translatable",
+        "scripts/translate.py::llm_translatable_json",
+        "scripts/translate.py::remove_all_removable"
+      ],
+      "manual_impacted_nodes": [
+        "scripts/translate.py::get_langs",
+        "scripts/translate.py::generate_lang_path",
+        "scripts/translate.py::generate_en_path",
+        "scripts/translate.py::get_prompt",
+        "fastapi/param_functions.py::Path"
+      ],
+      "graph_tokens": 1033,
+      "baseline_tokens": 3769,
+      "recall": 1.0,
+      "context_reduction": 0.7259219952241974,
+      "anchor_resolution_rate": 0.5714285714285714,
+      "score": 0.8749194557101163
+    },
+    {
+      "id": "requests-e331a288f3",
+      "repo": "requests",
+      "repo_url": "https://github.com/psf/requests",
+      "base_sha": "753fd08c5eacce0aa0df73fe47e49525c67e0a29",
+      "head_sha": "e331a288f369973f5de0ec8901c94cae4fa87286",
+      "changed_files": [
+        "src/requests/adapters.py",
+        "src/requests/utils.py"
+      ],
+      "retrieved_nodes": [
+        "src/requests/adapters.py::BaseAdapter.__init__",
+        "src/requests/adapters.py::BaseAdapter.close",
+        "src/requests/adapters.py::BaseAdapter.send",
+        "src/requests/adapters.py::_urllib3_request_context",
+        "src/requests/adapters.py::HTTPAdapter.build_connection_pool_key_attributes",
+        "src/requests/adapters.py::HTTPAdapter.get_connection_with_tls_context"
+      ],
+      "manual_impacted_nodes": [
+        "src/requests/adapters.py::_urllib3_request_context",
+        "src/requests/adapters.py::BaseAdapter.__init__",
+        "src/requests/adapters.py::BaseAdapter.send",
+        "src/requests/adapters.py::BaseAdapter.close",
+        "src/requests/adapters.py::HTTPAdapter.build_connection_pool_key_attributes"
+      ],
+      "graph_tokens": 395,
+      "baseline_tokens": 13092,
+      "recall": 1.0,
+      "context_reduction": 0.96982890314696,
+      "anchor_resolution_rate": 1.3333333333333333,
+      "score": 0.9909486709440879
+    },
+    {
+      "id": "requests-d2f6bdecc8",
+      "repo": "requests",
+      "repo_url": "https://github.com/psf/requests",
+      "base_sha": "a044b020dea43230585126901684a0f30ec635a8",
+      "head_sha": "d2f6bdecc835475c3cfbb83565ea879d7b2712ca",
+      "changed_files": [
+        "src/requests/models.py"
+      ],
+      "retrieved_nodes": [
+        "src/requests/models.py::RequestEncodingMixin._encode_files",
+        "src/requests/models.py::RequestEncodingMixin._encode_params",
+        "src/requests/models.py::RequestEncodingMixin.path_url",
+        "src/requests/models.py::RequestHooksMixin.register_hook",
+        "src/requests/utils.py::guess_filename",
+        "src/requests/utils.py::to_key_val_list"
+      ],
+      "manual_impacted_nodes": [
+        "src/requests/models.py::RequestEncodingMixin.path_url",
+        "src/requests/models.py::RequestEncodingMixin._encode_params",
+        "src/requests/models.py::RequestEncodingMixin._encode_files",
+        "src/requests/models.py::RequestHooksMixin.register_hook",
+        "src/requests/utils.py::guess_filename"
+      ],
+      "graph_tokens": 391,
+      "baseline_tokens": 8223,
+      "recall": 1.0,
+      "context_reduction": 0.9524504438769306,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.9857351331630791
+    },
+    {
+      "id": "requests-27e0981962",
+      "repo": "requests",
+      "repo_url": "https://github.com/psf/requests",
+      "base_sha": "6ec76b4a36fba4a32fb72f5f9ba04e632635e477",
+      "head_sha": "27e0981962d355b9532256f4dcb3d42f64b04d9c",
+      "changed_files": [
+        "src/requests/adapters.py",
+        "tests/test_requests.py"
+      ],
+      "retrieved_nodes": [
+        "src/requests/adapters.py::BaseAdapter.__init__",
+        "src/requests/adapters.py::BaseAdapter.close",
+        "src/requests/adapters.py::BaseAdapter.send",
+        "src/requests/adapters.py::_urllib3_request_context",
+        "src/requests/adapters.py::HTTPAdapter.build_connection_pool_key_attributes",
+        "src/requests/adapters.py::HTTPAdapter.get_connection_with_tls_context"
+      ],
+      "manual_impacted_nodes": [
+        "src/requests/adapters.py::_urllib3_request_context",
+        "src/requests/adapters.py::BaseAdapter.__init__",
+        "src/requests/adapters.py::BaseAdapter.send",
+        "src/requests/adapters.py::BaseAdapter.close",
+        "src/requests/adapters.py::HTTPAdapter.build_connection_pool_key_attributes"
+      ],
+      "graph_tokens": 395,
+      "baseline_tokens": 5140,
+      "recall": 1.0,
+      "context_reduction": 0.9231517509727627,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.9769455252918288
+    },
+    {
+      "id": "requests-3f07f990ac",
+      "repo": "requests",
+      "repo_url": "https://github.com/psf/requests",
+      "base_sha": "e57b5bf05c4e39281b5547b1bd05a5074dc96df3",
+      "head_sha": "3f07f990ac74f1e1691ba17ef8c14007f05846ab",
+      "changed_files": [
+        "src/requests/adapters.py"
+      ],
+      "retrieved_nodes": [
+        "src/requests/adapters.py::BaseAdapter.__init__",
+        "src/requests/adapters.py::BaseAdapter.close",
+        "src/requests/adapters.py::BaseAdapter.send",
+        "src/requests/adapters.py::_urllib3_request_context",
+        "src/requests/adapters.py::HTTPAdapter.build_connection_pool_key_attributes",
+        "src/requests/adapters.py::HTTPAdapter.get_connection_with_tls_context"
+      ],
+      "manual_impacted_nodes": [
+        "src/requests/adapters.py::_urllib3_request_context",
+        "src/requests/adapters.py::BaseAdapter.__init__",
+        "src/requests/adapters.py::BaseAdapter.send",
+        "src/requests/adapters.py::BaseAdapter.close",
+        "src/requests/adapters.py::HTTPAdapter.build_connection_pool_key_attributes"
+      ],
+      "graph_tokens": 395,
+      "baseline_tokens": 5140,
+      "recall": 1.0,
+      "context_reduction": 0.9231517509727627,
+      "anchor_resolution_rate": 4.0,
+      "score": 0.9769455252918288
+    },
+    {
+      "id": "requests-ef439eb779",
+      "repo": "requests",
+      "repo_url": "https://github.com/psf/requests",
+      "base_sha": "cbce031327be4f1b4b5fd041ff4dcaa8efa2ce53",
+      "head_sha": "ef439eb779c1eba7cbdeeeb302b11e1e061b4b7d",
+      "changed_files": [
+        "src/requests/sessions.py",
+        "tests/test_requests.py"
+      ],
+      "retrieved_nodes": [
+        "src/requests/sessions.py::SessionRedirectMixin.get_redirect_target",
+        "src/requests/sessions.py::SessionRedirectMixin.send",
+        "src/requests/sessions.py::merge_hooks",
+        "src/requests/sessions.py::merge_setting",
+        "src/requests/sessions.py::SessionRedirectMixin.resolve_redirects",
+        "src/requests/_internal_utils.py::to_native_string",
+        "src/requests/utils.py::to_key_val_list",
+        "src/requests/sessions.py::Session.merge_environment_settings",
+        "src/requests/sessions.py::Session.request"
+      ],
+      "manual_impacted_nodes": [
+        "src/requests/sessions.py::merge_setting",
+        "src/requests/sessions.py::merge_hooks",
+        "src/requests/sessions.py::SessionRedirectMixin.send",
+        "src/requests/sessions.py::SessionRedirectMixin.get_redirect_target",
+        "src/requests/_internal_utils.py::to_native_string"
+      ],
+      "graph_tokens": 576,
+      "baseline_tokens": 6674,
+      "recall": 1.0,
+      "context_reduction": 0.913694935570872,
+      "anchor_resolution_rate": 1.3333333333333333,
+      "score": 0.9741084806712615
+    },
+    {
+      "id": "requests-5f338446f9",
+      "repo": "requests",
+      "repo_url": "https://github.com/psf/requests",
+      "base_sha": "47914226c2968802f2cdee3f6f0f6e06e4472f64",
+      "head_sha": "5f338446f9eabd956e7e132668f330d9de4fc368",
+      "changed_files": [
+        "src/requests/sessions.py"
+      ],
+      "retrieved_nodes": [
+        "src/requests/sessions.py::SessionRedirectMixin.get_redirect_target",
+        "src/requests/sessions.py::SessionRedirectMixin.send",
+        "src/requests/sessions.py::merge_hooks",
+        "src/requests/sessions.py::merge_setting",
+        "src/requests/sessions.py::SessionRedirectMixin.resolve_redirects",
+        "src/requests/_internal_utils.py::to_native_string",
+        "src/requests/utils.py::to_key_val_list",
+        "src/requests/sessions.py::Session.merge_environment_settings",
+        "src/requests/sessions.py::Session.request"
+      ],
+      "manual_impacted_nodes": [
+        "src/requests/sessions.py::merge_setting",
+        "src/requests/sessions.py::merge_hooks",
+        "src/requests/sessions.py::SessionRedirectMixin.send",
+        "src/requests/sessions.py::SessionRedirectMixin.get_redirect_target",
+        "src/requests/_internal_utils.py::to_native_string"
+      ],
+      "graph_tokens": 576,
+      "baseline_tokens": 6674,
+      "recall": 1.0,
+      "context_reduction": 0.913694935570872,
+      "anchor_resolution_rate": 4.0,
+      "score": 0.9741084806712615
+    },
+    {
+      "id": "requests-d58d8aa2f4",
+      "repo": "requests",
+      "repo_url": "https://github.com/psf/requests",
+      "base_sha": "91a3eabd3dcc4d7f36dd8249e4777a90ef9b4305",
+      "head_sha": "d58d8aa2f45c3575268d6d5250745ef69f9cf8b7",
+      "changed_files": [
+        "src/requests/sessions.py"
+      ],
+      "retrieved_nodes": [
+        "src/requests/sessions.py::SessionRedirectMixin.get_redirect_target",
+        "src/requests/sessions.py::SessionRedirectMixin.send",
+        "src/requests/sessions.py::merge_hooks",
+        "src/requests/sessions.py::merge_setting",
+        "src/requests/sessions.py::SessionRedirectMixin.resolve_redirects",
+        "src/requests/_internal_utils.py::to_native_string",
+        "src/requests/utils.py::to_key_val_list",
+        "src/requests/sessions.py::Session.merge_environment_settings",
+        "src/requests/sessions.py::Session.request"
+      ],
+      "manual_impacted_nodes": [
+        "src/requests/sessions.py::merge_setting",
+        "src/requests/sessions.py::merge_hooks",
+        "src/requests/sessions.py::SessionRedirectMixin.send",
+        "src/requests/sessions.py::SessionRedirectMixin.get_redirect_target",
+        "src/requests/_internal_utils.py::to_native_string"
+      ],
+      "graph_tokens": 576,
+      "baseline_tokens": 6674,
+      "recall": 1.0,
+      "context_reduction": 0.913694935570872,
+      "anchor_resolution_rate": 4.0,
+      "score": 0.9741084806712615
+    },
+    {
+      "id": "requests-b294b08fe3",
+      "repo": "requests",
+      "repo_url": "https://github.com/psf/requests",
+      "base_sha": "5f3ff9b9e4d3d44960467e7877e06e9efa22f20b",
+      "head_sha": "b294b08fe3b08df9f646f64d1250f96193dab066",
+      "changed_files": [
+        "src/requests/__init__.py"
+      ],
+      "retrieved_nodes": [
+        "src/requests/__init__.py::_check_cryptography",
+        "src/requests/__init__.py::check_compatibility"
+      ],
+      "manual_impacted_nodes": [
+        "src/requests/__init__.py::check_compatibility",
+        "src/requests/__init__.py::_check_cryptography"
+      ],
+      "graph_tokens": 141,
+      "baseline_tokens": 1236,
+      "recall": 1.0,
+      "context_reduction": 0.8859223300970874,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.9657766990291262
+    },
+    {
+      "id": "requests-b2a1d33f57",
+      "repo": "requests",
+      "repo_url": "https://github.com/psf/requests",
+      "base_sha": "392b01f26e1cca4a2ada1539a6ae1a1b607ec33a",
+      "head_sha": "b2a1d33f571518ca9a6148e7da787cc5827f897a",
+      "changed_files": [
+        "src/requests/__init__.py"
+      ],
+      "retrieved_nodes": [
+        "src/requests/__init__.py::_check_cryptography",
+        "src/requests/__init__.py::check_compatibility"
+      ],
+      "manual_impacted_nodes": [
+        "src/requests/__init__.py::check_compatibility",
+        "src/requests/__init__.py::_check_cryptography"
+      ],
+      "graph_tokens": 141,
+      "baseline_tokens": 1236,
+      "recall": 1.0,
+      "context_reduction": 0.8859223300970874,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.9657766990291262
+    },
+    {
+      "id": "requests-4bd79e3973",
+      "repo": "requests",
+      "repo_url": "https://github.com/psf/requests",
+      "base_sha": "da9113c0466850a425e554630a732ec1f7d045fc",
+      "head_sha": "4bd79e397304d46dfccd76f36c07f66c0295ff82",
+      "changed_files": [
+        "src/requests/__init__.py"
+      ],
+      "retrieved_nodes": [
+        "src/requests/__init__.py::_check_cryptography",
+        "src/requests/__init__.py::check_compatibility"
+      ],
+      "manual_impacted_nodes": [
+        "src/requests/__init__.py::check_compatibility",
+        "src/requests/__init__.py::_check_cryptography"
+      ],
+      "graph_tokens": 141,
+      "baseline_tokens": 1236,
+      "recall": 1.0,
+      "context_reduction": 0.8859223300970874,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.9657766990291262
+    },
+    {
+      "id": "click-bb7be1f6a9",
+      "repo": "click",
+      "repo_url": "https://github.com/pallets/click",
+      "base_sha": "6c4a77ba24854dab793a8ff72110a0a24c403c9f",
+      "head_sha": "bb7be1f6a91f3fd1267d1a6d68771273d593f9c7",
+      "changed_files": [
+        "src/click/core.py"
+      ],
+      "retrieved_nodes": [
+        "src/click/core.py::_check_nested_chain",
+        "src/click/core.py::_complete_visible_commands",
+        "src/click/core.py::augment_usage_errors",
+        "src/click/core.py::batch",
+        "src/click/core.py::CommandCollection.get_command",
+        "src/click/core.py::Group.add_command",
+        "src/click/core.py::Group.command.decorator",
+        "src/click/core.py::Group.group.decorator",
+        "src/click/core.py::Option.value_from_envvar"
+      ],
+      "manual_impacted_nodes": [
+        "src/click/core.py::_complete_visible_commands",
+        "src/click/core.py::_check_nested_chain",
+        "src/click/core.py::batch",
+        "src/click/core.py::augment_usage_errors",
+        "src/click/core.py::CommandCollection.get_command"
+      ],
+      "graph_tokens": 586,
+      "baseline_tokens": 26446,
+      "recall": 1.0,
+      "context_reduction": 0.9778416395674204,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.993352491870226
+    },
+    {
+      "id": "click-6c4a77ba24",
+      "repo": "click",
+      "repo_url": "https://github.com/pallets/click",
+      "base_sha": "5850ef97230f84c74d0234ab0f30f23b398a6eee",
+      "head_sha": "6c4a77ba24854dab793a8ff72110a0a24c403c9f",
+      "changed_files": [
+        "src/click/core.py"
+      ],
+      "retrieved_nodes": [
+        "src/click/core.py::_check_nested_chain",
+        "src/click/core.py::_complete_visible_commands",
+        "src/click/core.py::augment_usage_errors",
+        "src/click/core.py::batch",
+        "src/click/core.py::CommandCollection.get_command",
+        "src/click/core.py::Group.add_command",
+        "src/click/core.py::Group.command.decorator",
+        "src/click/core.py::Group.group.decorator",
+        "src/click/core.py::Option.value_from_envvar"
+      ],
+      "manual_impacted_nodes": [
+        "src/click/core.py::_complete_visible_commands",
+        "src/click/core.py::_check_nested_chain",
+        "src/click/core.py::batch",
+        "src/click/core.py::augment_usage_errors",
+        "src/click/core.py::CommandCollection.get_command"
+      ],
+      "graph_tokens": 586,
+      "baseline_tokens": 26446,
+      "recall": 1.0,
+      "context_reduction": 0.9778416395674204,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.993352491870226
+    },
+    {
+      "id": "click-b5464b7e06",
+      "repo": "click",
+      "repo_url": "https://github.com/pallets/click",
+      "base_sha": "88328fc8743d43566081d9f17acad5f5552f5a87",
+      "head_sha": "b5464b7e065bdfd952b1532880941f1be07e4e2b",
+      "changed_files": [
+        "src/click/core.py",
+        "tests/test_info_dict.py"
+      ],
+      "retrieved_nodes": [
+        "src/click/core.py::_check_nested_chain",
+        "src/click/core.py::_complete_visible_commands",
+        "src/click/core.py::augment_usage_errors",
+        "src/click/core.py::batch",
+        "src/click/core.py::CommandCollection.get_command",
+        "src/click/core.py::Group.add_command",
+        "src/click/core.py::Group.command.decorator",
+        "src/click/core.py::Group.group.decorator",
+        "src/click/core.py::Option.value_from_envvar"
+      ],
+      "manual_impacted_nodes": [
+        "src/click/core.py::_complete_visible_commands",
+        "src/click/core.py::_check_nested_chain",
+        "src/click/core.py::batch",
+        "src/click/core.py::augment_usage_errors",
+        "src/click/core.py::CommandCollection.get_command"
+      ],
+      "graph_tokens": 586,
+      "baseline_tokens": 26446,
+      "recall": 1.0,
+      "context_reduction": 0.9778416395674204,
+      "anchor_resolution_rate": 1.3333333333333333,
+      "score": 0.993352491870226
+    },
+    {
+      "id": "click-fc6c7c47ed",
+      "repo": "click",
+      "repo_url": "https://github.com/pallets/click",
+      "base_sha": "5b9630f50fde938b72ad8c99542efe3a6f5717e2",
+      "head_sha": "fc6c7c47edd6110b6bd5a1a5297b2035214b0cd1",
+      "changed_files": [
+        "src/click/types.py",
+        "tests/test_types.py"
+      ],
+      "retrieved_nodes": [
+        "src/click/types.py::ParamType.__call__",
+        "src/click/types.py::ParamType.get_metavar",
+        "src/click/types.py::ParamType.get_missing_message",
+        "src/click/types.py::ParamType.to_info_dict",
+        "src/click/types.py::ParamType.convert"
+      ],
+      "manual_impacted_nodes": [
+        "src/click/types.py::ParamType.to_info_dict",
+        "src/click/types.py::ParamType.__call__",
+        "src/click/types.py::ParamType.get_metavar",
+        "src/click/types.py::ParamType.get_missing_message",
+        "src/click/types.py::ParamType.convert"
+      ],
+      "graph_tokens": 334,
+      "baseline_tokens": 9039,
+      "recall": 1.0,
+      "context_reduction": 0.9630490098462219,
+      "anchor_resolution_rate": 1.3333333333333333,
+      "score": 0.9889147029538665
+    },
+    {
+      "id": "click-701b313160",
+      "repo": "click",
+      "repo_url": "https://github.com/pallets/click",
+      "base_sha": "3be1f33c8e0b13295853f6aa64d1f7412b5312df",
+      "head_sha": "701b313160be12752e49b3f7cea32402c0969a69",
+      "changed_files": [
+        "src/click/shell_completion.py",
+        "tests/test_shell_completion.py"
+      ],
+      "retrieved_nodes": [
+        "src/click/shell_completion.py::CompletionItem.__getattr__",
+        "src/click/shell_completion.py::CompletionItem.__init__",
+        "src/click/shell_completion.py::ShellComplete.__init__",
+        "src/click/shell_completion.py::shell_complete",
+        "src/click/shell_completion.py::get_completion_class"
+      ],
+      "manual_impacted_nodes": [
+        "src/click/shell_completion.py::shell_complete",
+        "src/click/shell_completion.py::CompletionItem.__init__",
+        "src/click/shell_completion.py::CompletionItem.__getattr__",
+        "src/click/shell_completion.py::ShellComplete.__init__",
+        "src/click/shell_completion.py::get_completion_class"
+      ],
+      "graph_tokens": 326,
+      "baseline_tokens": 4503,
+      "recall": 1.0,
+      "context_reduction": 0.9276038196757717,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.9782811459027315
+    },
+    {
+      "id": "click-d1a80aa95c",
+      "repo": "click",
+      "repo_url": "https://github.com/pallets/click",
+      "base_sha": "499bbeea64fbc251ece62188bcee185bfcec2316",
+      "head_sha": "d1a80aa95cc207f50da1c438af742b7edad02267",
+      "changed_files": [
+        "src/click/_termui_impl.py",
+        "src/click/utils.py"
+      ],
+      "retrieved_nodes": [
+        "src/click/_termui_impl.py::ProgressBar.__enter__",
+        "src/click/_termui_impl.py::ProgressBar.__exit__",
+        "src/click/_termui_impl.py::ProgressBar.__init__",
+        "src/click/_termui_impl.py::ProgressBar.__iter__",
+        "src/click/_termui_impl.py::ProgressBar.render_progress",
+        "src/click/_compat.py::term_len",
+        "src/click/_termui_impl.py::ProgressBar.format_progress_line",
+        "src/click/_compat.py::strip_ansi",
+        "src/click/_termui_impl.py::ProgressBar.format_bar",
+        "src/click/_termui_impl.py::ProgressBar.format_eta",
+        "src/click/_termui_impl.py::ProgressBar.format_pct",
+        "src/click/_termui_impl.py::ProgressBar.format_pos",
+        "src/click/_termui_impl.py::ProgressBar.render_finish",
+        "tests/test_termui.py::FakeClock.time",
+        "src/click/_termui_impl.py::ProgressBar.generator",
+        "src/click/_termui_impl.py::ProgressBar.finish",
+        "src/click/_termui_impl.py::ProgressBar.update",
+        "src/click/_termui_impl.py::ProgressBar.make_step"
+      ],
+      "manual_impacted_nodes": [
+        "src/click/_termui_impl.py::ProgressBar.__init__",
+        "src/click/_termui_impl.py::ProgressBar.__enter__",
+        "src/click/_termui_impl.py::ProgressBar.__exit__",
+        "src/click/_termui_impl.py::ProgressBar.__iter__",
+        "src/click/_termui_impl.py::ProgressBar.generator"
+      ],
+      "graph_tokens": 1167,
+      "baseline_tokens": 10893,
+      "recall": 1.0,
+      "context_reduction": 0.8928669787937208,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.9678600936381162
+    },
+    {
+      "id": "click-a1235aacb1",
+      "repo": "click",
+      "repo_url": "https://github.com/pallets/click",
+      "base_sha": "565f36d5bc4a15d304337b749e113fb4477b1843",
+      "head_sha": "a1235aacb1be55dc66ddcfefbf64dec44b6ab54d",
+      "changed_files": [
+        "src/click/shell_completion.py",
+        "tests/test_shell_completion.py"
+      ],
+      "retrieved_nodes": [
+        "src/click/shell_completion.py::CompletionItem.__getattr__",
+        "src/click/shell_completion.py::CompletionItem.__init__",
+        "src/click/shell_completion.py::ShellComplete.__init__",
+        "src/click/shell_completion.py::shell_complete",
+        "src/click/shell_completion.py::get_completion_class"
+      ],
+      "manual_impacted_nodes": [
+        "src/click/shell_completion.py::shell_complete",
+        "src/click/shell_completion.py::CompletionItem.__init__",
+        "src/click/shell_completion.py::CompletionItem.__getattr__",
+        "src/click/shell_completion.py::ShellComplete.__init__",
+        "src/click/shell_completion.py::get_completion_class"
+      ],
+      "graph_tokens": 326,
+      "baseline_tokens": 4503,
+      "recall": 1.0,
+      "context_reduction": 0.9276038196757717,
+      "anchor_resolution_rate": 0.8,
+      "score": 0.9582811459027316
+    },
+    {
+      "id": "click-19fd4d6e18",
+      "repo": "click",
+      "repo_url": "https://github.com/pallets/click",
+      "base_sha": "c69643b60cf971cd5d8e5d3902632807ceab9b8f",
+      "head_sha": "19fd4d6e18bc9fce451f92f422696b11169faa57",
+      "changed_files": [
+        "src/click/shell_completion.py",
+        "tests/test_shell_completion.py"
+      ],
+      "retrieved_nodes": [
+        "src/click/shell_completion.py::CompletionItem.__getattr__",
+        "src/click/shell_completion.py::CompletionItem.__init__",
+        "src/click/shell_completion.py::ShellComplete.__init__",
+        "src/click/shell_completion.py::shell_complete",
+        "src/click/shell_completion.py::get_completion_class"
+      ],
+      "manual_impacted_nodes": [
+        "src/click/shell_completion.py::shell_complete",
+        "src/click/shell_completion.py::CompletionItem.__init__",
+        "src/click/shell_completion.py::CompletionItem.__getattr__",
+        "src/click/shell_completion.py::ShellComplete.__init__",
+        "src/click/shell_completion.py::get_completion_class"
+      ],
+      "graph_tokens": 326,
+      "baseline_tokens": 4503,
+      "recall": 1.0,
+      "context_reduction": 0.9276038196757717,
+      "anchor_resolution_rate": 0.6666666666666666,
+      "score": 0.9449478125693982
+    },
+    {
+      "id": "click-c5cced7b30",
+      "repo": "click",
+      "repo_url": "https://github.com/pallets/click",
+      "base_sha": "2468b70997a6ec27ced4b4867954c90da3f92075",
+      "head_sha": "c5cced7b3096804567688df645194e3ed3dfa88b",
+      "changed_files": [
+        "src/click/_termui_impl.py"
+      ],
+      "retrieved_nodes": [
+        "src/click/_termui_impl.py::ProgressBar.__enter__",
+        "src/click/_termui_impl.py::ProgressBar.__exit__",
+        "src/click/_termui_impl.py::ProgressBar.__init__",
+        "src/click/_termui_impl.py::ProgressBar.__iter__",
+        "src/click/_termui_impl.py::ProgressBar.render_progress",
+        "src/click/_compat.py::term_len",
+        "src/click/_termui_impl.py::ProgressBar.format_progress_line",
+        "src/click/_compat.py::strip_ansi",
+        "src/click/_termui_impl.py::ProgressBar.format_bar",
+        "src/click/_termui_impl.py::ProgressBar.format_eta",
+        "src/click/_termui_impl.py::ProgressBar.format_pct",
+        "src/click/_termui_impl.py::ProgressBar.format_pos",
+        "src/click/_termui_impl.py::ProgressBar.render_finish",
+        "tests/test_termui.py::FakeClock.time",
+        "src/click/_termui_impl.py::ProgressBar.generator",
+        "src/click/_termui_impl.py::ProgressBar.finish",
+        "src/click/_termui_impl.py::ProgressBar.update",
+        "src/click/_termui_impl.py::ProgressBar.make_step"
+      ],
+      "manual_impacted_nodes": [
+        "src/click/_termui_impl.py::ProgressBar.__init__",
+        "src/click/_termui_impl.py::ProgressBar.__enter__",
+        "src/click/_termui_impl.py::ProgressBar.__exit__",
+        "src/click/_termui_impl.py::ProgressBar.__iter__",
+        "src/click/_termui_impl.py::ProgressBar.generator"
+      ],
+      "graph_tokens": 1167,
+      "baseline_tokens": 6227,
+      "recall": 1.0,
+      "context_reduction": 0.8125903324233178,
+      "anchor_resolution_rate": 2.0,
+      "score": 0.9437770997269953
+    },
+    {
+      "id": "click-f14b75063f",
+      "repo": "click",
+      "repo_url": "https://github.com/pallets/click",
+      "base_sha": "9982faee85f2715a9cde03639f8c0382561c09ce",
+      "head_sha": "f14b75063fb36b9208b13a920326926363616b39",
+      "changed_files": [
+        "src/click/_termui_impl.py",
+        "src/click/_winconsole.py",
+        "src/click/core.py",
+        "src/click/formatting.py",
+        "tests/test_arguments.py",
+        "tests/test_utils.py"
+      ],
+      "retrieved_nodes": [
+        "src/click/_termui_impl.py::ProgressBar.__enter__",
+        "src/click/_termui_impl.py::ProgressBar.__exit__",
+        "src/click/_termui_impl.py::ProgressBar.__init__",
+        "src/click/_termui_impl.py::ProgressBar.__iter__",
+        "src/click/_termui_impl.py::ProgressBar.render_progress",
+        "src/click/_compat.py::term_len",
+        "src/click/_termui_impl.py::ProgressBar.format_progress_line",
+        "src/click/_compat.py::strip_ansi",
+        "src/click/_termui_impl.py::ProgressBar.format_bar",
+        "src/click/_termui_impl.py::ProgressBar.format_eta",
+        "src/click/_termui_impl.py::ProgressBar.format_pct",
+        "src/click/_termui_impl.py::ProgressBar.format_pos",
+        "src/click/_termui_impl.py::ProgressBar.render_finish",
+        "tests/test_termui.py::FakeClock.time",
+        "src/click/_termui_impl.py::ProgressBar.generator",
+        "src/click/_termui_impl.py::ProgressBar.finish",
+        "src/click/_termui_impl.py::ProgressBar.update",
+        "src/click/_termui_impl.py::ProgressBar.make_step"
+      ],
+      "manual_impacted_nodes": [
+        "src/click/_termui_impl.py::ProgressBar.__init__",
+        "src/click/_termui_impl.py::ProgressBar.__enter__",
+        "src/click/_termui_impl.py::ProgressBar.__exit__",
+        "src/click/_termui_impl.py::ProgressBar.__iter__",
+        "src/click/_termui_impl.py::ProgressBar.generator"
+      ],
+      "graph_tokens": 1167,
+      "baseline_tokens": 36387,
+      "recall": 1.0,
+      "context_reduction": 0.9679281061917718,
+      "anchor_resolution_rate": 0.5,
+      "score": 0.9403784318575316
+    }
+  ]
+}

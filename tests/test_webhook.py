@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import hmac
 import json
@@ -189,3 +190,38 @@ def test_webhook_processes_pull_request_event_and_returns_review_json() -> None:
             "review findings=1",
         )
     ]
+
+
+def test_webhook_returns_504_when_review_runner_times_out() -> None:
+    secret = "top-secret"
+    settings = WebhookSettings(
+        github_webhook_secret=secret,
+        review_timeout_seconds=1,
+    )
+    commenter = _StubCommenter()
+
+    async def _slow_review_runner(*, pr_url, config, cache_dir, provider):
+        await asyncio.sleep(2)
+        raise AssertionError("unreachable")
+
+    app = create_app(
+        settings=settings,
+        provider=_StubProvider(),
+        review_runner=_slow_review_runner,
+        commenter=commenter,
+    )
+    client = TestClient(app)
+
+    body = json.dumps(_payload("opened")).encode("utf-8")
+    response = client.post(
+        "/webhook/github",
+        content=body,
+        headers={
+            "X-GitHub-Event": "pull_request",
+            "X-Hub-Signature-256": _sign(secret, body),
+            "Content-Type": "application/json",
+        },
+    )
+
+    assert response.status_code == 504
+    assert response.json()["detail"] == "Review timed out before completion."

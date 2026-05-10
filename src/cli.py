@@ -1,12 +1,11 @@
 """
-Typer-based CLI for D-GRAG PR review and benchmark execution.
+Typer-based CLI for D-GRAG PR review execution.
 """
 
 from __future__ import annotations
 
 import asyncio
 import json
-import subprocess
 from pathlib import Path
 from typing import Any, Optional
 
@@ -15,14 +14,6 @@ from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
 
-from src.eval.runner import (
-    DEFAULT_GRAPH_CACHE_DIR,
-    DEFAULT_OUTPUT_DIR,
-    DEFAULT_REPOS_DIR,
-    DEFAULT_SYSTEMS,
-    EvalRunConfig,
-    run_eval,
-)
 from src.github_api import GitHubIntegrationError, default_provider_from_env
 from src.pipeline.pr_orchestrator import (
     PipelineError,
@@ -34,7 +25,7 @@ from src.pipeline.pr_orchestrator import (
 
 app = typer.Typer(
     name="dgrag",
-    help="Delta-GRAG CLI for PR review and benchmarking.",
+    help="Delta-GRAG CLI for PR review.",
     no_args_is_help=True,
     add_completion=False,
 )
@@ -235,144 +226,6 @@ def review_command(
         )
     )
     raise typer.Exit(code=code)
-
-
-@app.command("benchmark")
-def benchmark_command(
-    pytest_path: str = typer.Option(
-        "pytest",
-        "--pytest-path",
-        help="Pytest executable to invoke for benchmark runs.",
-    ),
-    test_target: str = typer.Option(
-        "tests",
-        "--test-target",
-        help="Pytest target path or node id for the benchmark suite.",
-    ),
-    extra_arg: list[str] = typer.Option(
-        [],
-        "--extra-arg",
-        help="Additional argument to pass to pytest. Repeat for multiple values.",
-    ),
-) -> None:
-    """
-    Run the project's benchmark or evaluation suite through pytest.
-    """
-    command = [pytest_path, test_target, *extra_arg]
-    console.print(f"[cyan]Running benchmark command:[/cyan] {' '.join(command)}")
-
-    completed = subprocess.run(command, check=False)
-    raise typer.Exit(code=completed.returncode)
-
-
-@app.command("eval")
-def eval_command(
-    configs_dir: Optional[Path] = typer.Option(
-        None,
-        "--configs-dir",
-        help="Directory of code-review-graph-style eval YAML configs.",
-    ),
-    repo: list[str] = typer.Option(
-        [],
-        "--repo",
-        help="Repository config name to evaluate. Repeat for multiple repos.",
-    ),
-    system: list[str] = typer.Option(
-        list(DEFAULT_SYSTEMS),
-        "--system",
-        help="System adapter to run. Repeat for multiple systems.",
-    ),
-    output_dir: Path = typer.Option(
-        DEFAULT_OUTPUT_DIR,
-        "--output-dir",
-        help="Directory for metrics_table.csv, raw_runs.jsonl, and summary.md.",
-    ),
-    repos_dir: Path = typer.Option(
-        DEFAULT_REPOS_DIR,
-        "--repos-dir",
-        help="Directory where real open-source repositories are cloned/cached.",
-    ),
-    limit: Optional[int] = typer.Option(
-        None,
-        "--limit",
-        min=1,
-        help="Maximum number of configured commits to evaluate.",
-    ),
-    refresh: bool = typer.Option(
-        False,
-        "--refresh",
-        help="Fetch updates for existing cached repositories before evaluating.",
-    ),
-    k_up: int = typer.Option(2, "--k-up", min=0),
-    k_down: int = typer.Option(3, "--k-down", min=0),
-    max_nodes: int = typer.Option(180, "--max-nodes", min=1),
-    max_chars: int = typer.Option(12000, "--max-chars", min=256),
-    graph_cache_dir: Optional[Path] = typer.Option(
-        None,
-        "--graph-cache-dir",
-        help="Directory for cached graph JSON files. Defaults to evaluate/graph_cache.",
-    ),
-    no_graph_cache: bool = typer.Option(
-        False,
-        "--no-graph-cache",
-        help="Disable graph caching entirely (always build from source).",
-    ),
-    rebuild_graphs: bool = typer.Option(
-        False,
-        "--rebuild-graphs",
-        help="Ignore existing cache entries and rebuild graphs from source.",
-    ),
-) -> None:
-    """
-    Run LLM-free evaluation on real open-source project commits.
-    """
-    try:
-        df = run_eval(
-            EvalRunConfig(
-                configs_dir=configs_dir,
-                repos=tuple(repo),
-                systems=tuple(system),
-                output_dir=output_dir,
-                repos_dir=repos_dir,
-                limit=limit,
-                refresh=refresh,
-                k_up=k_up,
-                k_down=k_down,
-                max_nodes=max_nodes,
-                max_chars=max_chars,
-                graph_cache_dir=graph_cache_dir,
-                no_graph_cache=no_graph_cache,
-                rebuild_graphs=rebuild_graphs,
-            )
-        )
-    except Exception as exc:
-        _print_error(str(exc))
-        raise typer.Exit(code=1) from exc
-
-    console.print(f"[green]Wrote evaluation results to[/green] {output_dir}")
-    if not df.empty:
-        summary = (
-            df.groupby("system", dropna=False)
-            .agg(
-                cases=("pr_id", "count"),
-                structural_recall=("structural_recall", "mean"),
-                token_reduction_pct=("token_reduction_pct", "mean"),
-            )
-            .reset_index()
-        )
-        table = Table(title="LLM-free Evaluation Summary")
-        table.add_column("System")
-        table.add_column("Cases", justify="right")
-        table.add_column("Structural Recall", justify="right")
-        table.add_column("Token Reduction %", justify="right")
-        for row in summary.to_dict(orient="records"):
-            table.add_row(
-                str(row["system"]),
-                str(int(row["cases"])),
-                f"{float(row['structural_recall']):.3f}",
-                f"{float(row['token_reduction_pct']):.1f}",
-            )
-        console.print(table)
 
 
 def main() -> None:

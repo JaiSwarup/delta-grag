@@ -10,7 +10,6 @@ D-GRAG (**Delta-Graph Retrieval-Augmented Generation**) is a PR-aware review sys
 - deterministic context linearization
 - prompt / model integration
 - structured review post-processing
-- evaluation and ablation tooling
 - operational interfaces such as CLI, webhook, Docker, and CI
 
 ---
@@ -29,7 +28,7 @@ The current architecture is built around a few practical goals:
    - preserve file paths, line spans, node identifiers, and graph metadata
 
 4. **Modular execution**
-   - keep ingestion, graphing, traversal, prompting, orchestration, and evaluation loosely coupled
+   - keep ingestion, graphing, traversal, prompting, and orchestration loosely coupled
 
 5. **Operational usability**
    - support local CLI use, webhook-driven flows, Dockerized deployment, and CI validation
@@ -182,22 +181,16 @@ This layer converts source code into graph-structured repository knowledge.
   - caller -> callee relation
   - optional call-site metadata such as line number
 
-#### Two graph-related paths currently exist
+#### Canonical graph path
 
-There are two related graph-building surfaces in the repo:
+The canonical graph-construction implementation lives in:
 
-1. **root-level graph path**
-   - `src/ast_extractor.py`
-   - `src/call_extractor.py`
-   - `src/call_graph_builder.py`
-   - `src/graph_updater.py`
+- `src/ast_extractor.py`
+- `src/call_extractor.py`
+- `src/call_graph_builder.py`
+- `src/graph_updater.py`
 
-2. **package-scoped graph path**
-   - `src/graph/call_extractor.py`
-   - `src/graph/graph_builder.py`
-   - `src/graph/impact_subgraph.py`
-
-This reflects iterative development. Both are tested and used for different slices of the system.
+`src/graph/graph_builder.py` now acts as a compatibility wrapper over the canonical builder to preserve CLI/tests without duplicating extraction logic.
 
 ---
 
@@ -288,6 +281,7 @@ This layer determines the graph neighborhood worth sending to the reviewer.
   - callee
   - shared
 - produce subgraph stats and cutoff reasons
+- mark truncation metadata (`truncated`, cutoff reasons, budget info) for observability and evaluation
 
 #### Output characteristics
 
@@ -296,7 +290,7 @@ The impact retrieval layer returns:
 - induced subgraph
 - deterministic node order
 - enriched node-role model
-- traversal stats for observability and evaluation
+- traversal stats for observability
 
 This is the architecture’s core anti-context-explosion mechanism.
 
@@ -323,7 +317,7 @@ This layer converts graph structure into promptable text.
 #### Design principle
 
 The linearizer is intentionally **deterministic** and **budget-aware**.  
-That matters because evaluation, debugging, and CI all depend on stable prompt inputs.
+That matters because debugging and CI both depend on stable prompt inputs.
 
 ---
 
@@ -396,7 +390,6 @@ to
   - CLI output
   - saved review files
   - webhook/PR comments
-  - evaluation
 
 ---
 
@@ -425,7 +418,7 @@ There are two main orchestration surfaces in the current codebase.
 - supports retrieval-only mode
 - supports full-review mode
 - supports configurable output format
-- provides metadata for observability and evaluation
+- provides metadata for observability
 
 ---
 
@@ -483,57 +476,14 @@ Uses a lightweight vector-like token-frequency retrieval baseline rather than gr
 
 Architecturally, baselines are isolated from the core graph pipeline so they can be:
 - compared fairly
-- evaluated with the same metrics tooling
+- evaluated with consistent output contracts
 - evolved independently
 
 ---
 
-## 7. Evaluation architecture
+## 7. External integration architecture
 
-This layer measures system quality and supports comparison.
-
-### Main modules
-
-- `src/eval/metrics.py`
-- `src/eval/ablation.py`
-
-### 7.1 Metrics engine
-
-The metrics engine is intentionally **corpus-agnostic**.
-
-It works over explicit evaluation cases and computes:
-
-- structural recall
-- token reduction percentage
-- cross-file detection rate
-- hallucination rate
-- BLEU
-- ROUGE-L
-
-It also provides adapters from implemented runtime result types.
-
-### 7.2 Ablation runner
-
-The ablation runner is **corpus-driven** and currently built around explicit JSON inputs.
-
-It supports:
-
-- `(k, m)` sweeps
-- parser labels
-- aggregate CSV export
-- heatmap generation
-- concurrency limits for sweep execution
-
-### Architectural note
-
-The repo does not bundle fake “real benchmark” outputs.  
-`results/` is expected to be populated by actual runs of the metrics/ablation tooling.
-
----
-
-## 8. External integration architecture
-
-### 8.1 GitHub integration
+### 7.1 GitHub integration
 
 #### Main module
 
@@ -553,7 +503,7 @@ This is used by both:
 
 ---
 
-### 8.2 CLI
+### 7.2 CLI
 
 #### Main module
 
@@ -563,7 +513,6 @@ This is used by both:
 #### Responsibilities
 
 - expose `review` command for GitHub PR review
-- expose `benchmark` command for evaluation-oriented runs
 - show rich terminal output
 - write JSON output when requested
 - validate invalid PR URL input cleanly
@@ -572,7 +521,7 @@ The CLI is one of the main user-facing architecture boundaries.
 
 ---
 
-### 8.3 Webhook service
+### 7.3 Webhook service
 
 #### Main module
 
@@ -592,7 +541,7 @@ This is the architecture boundary for automated PR-event-driven review.
 
 ---
 
-## 9. Container and deployment architecture
+## 8. Container and deployment architecture
 
 ### Main files
 
@@ -617,7 +566,7 @@ The repository includes a reserved `src/grammar_libs/` location for future offli
 
 ---
 
-## 10. Testing and CI architecture
+## 9. Testing and CI architecture
 
 ### Main files
 
@@ -647,7 +596,7 @@ the repo now assumes changes should remain compatible with automated validation.
 
 ## 11. Data and control flow details
 
-### 11.1 Retrieval-only path
+### 10.1 Retrieval-only path
 
 A retrieval-only path typically looks like:
 
@@ -661,7 +610,7 @@ A retrieval-only path typically looks like:
 8. node code is aggregated for context sizing
 9. result is cached and returned
 
-### 11.2 Full review path
+### 10.2 Full review path
 
 A full-review path typically looks like:
 
@@ -677,7 +626,7 @@ A full-review path typically looks like:
 
 ---
 
-## 12. Architectural strengths
+## 11. Architectural strengths
 
 The implemented architecture already has several strong properties:
 
@@ -688,17 +637,12 @@ Traversal and linearization are bounded and stable.
 Many modules emit metadata, timing, or summary structures.
 
 ### Testability
-Provider protocols, stub-friendly APIs, and corpus-driven evaluation make it easy to test without real network calls.
+Provider protocols and stub-friendly APIs make it easy to test without real network calls.
 
 ### Operational separation
 Core logic, webhook behavior, CLI output, and deployment concerns are separated.
 
-### Evaluation-ready design
-Baselines and D-GRAG outputs can be pushed through the same metrics stack.
-
----
-
-## 13. Current architectural constraints
+## 12. Current architectural constraints
 
 This architecture also has known limitations.
 
@@ -708,9 +652,6 @@ The call-graph logic remains conservative and cannot fully model dynamic runtime
 ### Multiple historical code paths
 There are parallel root-level and package-level graph/review utilities in the repository due to iterative development.
 
-### Evaluation inputs are external
-Real benchmark corpora and PR datasets are not bundled by default.
-
 ### GitHub / LLM credentials are external
 Operational flows still depend on environment-provided secrets and external services.
 
@@ -719,7 +660,7 @@ Some modules are production-facing and heavily tested; others are supporting uti
 
 ---
 
-## 14. Recommended way to think about the codebase
+## 13. Recommended way to think about the codebase
 
 The cleanest mental model for the current repository is:
 
@@ -738,17 +679,15 @@ The cleanest mental model for the current repository is:
 - Docker
 - CI
 
-### Research / comparison layer
+### Comparison layer
 - baselines
-- metrics
-- ablation
-- notebook / LaTeX export
+- notebook
 
 This separation explains most of the directory structure and module boundaries.
 
 ---
 
-## 15. Architecture by package
+## 14. Architecture by package
 
 ### `src/ingestion/`
 Diffs, repositories, and anchor resolution.
@@ -771,15 +710,12 @@ Normalization, dedupe, scoring, and formatting.
 ### `src/baselines/`
 Comparison systems.
 
-### `src/eval/`
-Metrics and ablation infrastructure.
-
 ### top-level `src/*.py`
 Cross-cutting utilities and earlier/root-level architecture surfaces that still participate in the working implementation.
 
 ---
 
-## 16. Summary
+## 15. Summary
 
 The implemented D-GRAG repository is not just a prototype script collection. It now has a recognizable architecture with:
 
@@ -790,7 +726,6 @@ The implemented D-GRAG repository is not just a prototype script collection. It 
 - multiple review-generation paths
 - structured output normalization
 - baseline comparators
-- evaluation and ablation tooling
 - operational interfaces
 - Docker deployment assets
 - CI and coverage enforcement

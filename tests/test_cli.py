@@ -17,13 +17,12 @@ class _StubProvider:
         raise AssertionError("provider should not be called in this test")
 
 
-def test_cli_help_shows_review_and_benchmark_commands() -> None:
+def test_cli_help_shows_review_command() -> None:
     result = runner.invoke(app, ["--help"])
 
     assert result.exit_code == 0
-    assert "Delta-GRAG CLI for PR review and benchmarking" in result.stdout
+    assert "Delta-GRAG CLI for PR review" in result.stdout
     assert "review" in result.stdout
-    assert "benchmark" in result.stdout
 
 
 def test_cli_review_rejects_invalid_pr_url_without_stack_trace() -> None:

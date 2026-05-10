@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import subprocess
 import shutil
+from time import sleep
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -73,8 +74,8 @@ def clone_at_sha(repo_url: str, commit_sha: str, cache_dir: str | Path) -> RepoS
 
     snapshot_path.parent.mkdir(parents=True, exist_ok=True)
     try:
-        _git(["clone", repo_url, str(snapshot_path)])
-        _git(["checkout", normalized_sha], cwd=snapshot_path)
+        _git_with_retry(["clone", repo_url, str(snapshot_path)])
+        _git_with_retry(["checkout", normalized_sha], cwd=snapshot_path)
     except RepoError:
         if snapshot_path.exists():
             _cleanup_incomplete_snapshot(snapshot_path)
@@ -148,6 +149,35 @@ def _git(args: Sequence[str], cwd: Path | None = None) -> str:
         stderr = completed.stderr.strip() or completed.stdout.strip() or "git failed"
         raise RepoError(stderr)
     return completed.stdout
+
+
+def _git_with_retry(args: Sequence[str], cwd: Path | None = None) -> str:
+    attempts = 3
+    for attempt in range(1, attempts + 1):
+        try:
+            return _git(args, cwd=cwd)
+        except RepoError as exc:
+            if attempt >= attempts or not _looks_transient_git_error(str(exc)):
+                raise
+            sleep(0.2 * (2 ** (attempt - 1)))
+    raise RepoError("git operation failed after retries")
+
+
+def _looks_transient_git_error(message: str) -> bool:
+    msg = message.lower()
+    transient_markers = (
+        "timed out",
+        "timeout",
+        "connection reset",
+        "connection aborted",
+        "temporary failure",
+        "unable to access",
+        "tls",
+        "proxy",
+        "network",
+        "http 5",
+    )
+    return any(marker in msg for marker in transient_markers)
 
 
 def _repo_cache_key(repo_url: str) -> str:
