@@ -446,7 +446,7 @@ No license metadata is currently declared in this README. If you intend to publi
 
 ## Summary
 
-D-GRAG is a modular PR-aware review system that uses **static call graphs + bounded graph retrieval** to provide more structurally relevant review context than diff-only or purely semantic baselines.
+**D-GRAG** is a modular PR-aware review system that uses **static call graphs + bounded graph retrieval** to provide more structurally relevant review context than diff-only or purely semantic baselines.
 
 If you want to get started quickly:
 
